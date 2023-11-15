@@ -7,11 +7,24 @@ app = Flask(__name__ , static_url_path='', static_folder='static/Lost And Found 
 connection = mysql.connector.connect(host='localhost',port='3306',
                                         database='lostnfounddb',
                                         user='root',
-                                        password='105671080088')
+                                        password='')
 
 
 cursor = connection.cursor()
 
+def installdb():
+    try:
+        create_table = """
+        CREATE TABLE IF NOT EXISTS  (
+            
+        )
+    """
+        cursor.execute(create_table)
+        print("table created")
+    except mysql.connector.Error as e:
+        print("error in mysql")
+    finally:
+        cursor.close()
 
 @app.route('/')
 def landing():
@@ -31,8 +44,6 @@ def register():
         cursor.execute("Insert into tblusers values (NULL,%s,%s,%s,%s,%s)",(username,passwd,email,role,studnum))
         connection.commit()
     return render_template('register.html')
-
-
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
