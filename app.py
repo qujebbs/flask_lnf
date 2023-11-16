@@ -1,11 +1,7 @@
-from flask import (
-    Flask,
-    render_template,
-    request,
-    redirect,
-    url_for,
-    request,
-)
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+from flask import Flask, render_template, request, redirect, url_for, request
+
 import mysql.connector
 
 app = Flask(
@@ -17,6 +13,7 @@ connection = mysql.connector.connect(
 )
 
 cursor = connection.cursor()
+
 
 # def installdb():
 #     try:
@@ -54,40 +51,39 @@ def register():
         )
         existing_records = cursor.fetchall()
 
-        if any(record[0] == username for record in existing_records):
-            text = "Username already exists. Please choose a different username."
-            text_status = "info"
+        errors = {
+            "username": "Username already exists.",
+            "studnum": "Student Id already exists.",
+            "email": "Email address already exists.",
+        }
+
+        # Check for errors
+        for record in existing_records:
+            if record[0] == username:
+                error_key = "username"
+            elif record[1] == studnum:
+                error_key = "studnum"
+            elif record[2] == email:
+                error_key = "email"
+            else:
+                continue
+
             return render_template(
                 "register.html",
-                text=text,
-                text_status=text_status,
-                show_sweetalert=True,
-            )
-        elif any(record[1] == studnum for record in existing_records):
-            text = "Student Id already exists. Please use a different Student Id."
-            text_status = "info"
-            return render_template(
-                "register.html",
-                text=text,
-                text_status=text_status,
-                show_sweetalert=True,
-            )
-        elif any(record[2] == email for record in existing_records):
-            text = "Email already exists. Please enter a different email address."
-            text_status = "info"
-            return render_template(
-                "register.html",
-                text=text,
-                text_status=text_status,
+                text=errors[error_key],
+                text_status="error",
                 show_sweetalert=True,
             )
 
         # Insert the user into the database
-        cursor.execute(
-            "INSERT INTO tbl_user (col_userID, col_studNum, col_username, col_password, col_email) VALUES (NULL, %s, %s, %s, %s)",
-            (studnum, username, passwd, email),
-        )
+        query = "CALL createUser(%s,%s,%s,%s)"
+        cursor.execute(query, (studnum, username, email, passwd))
         connection.commit()
+        text = "Account created successfully."
+        text_status = "success"
+        return render_template(
+            "register.html", text=text, text_status=text_status, show_sweetalert=True
+        )
 
     return render_template("register.html")
 
@@ -102,9 +98,9 @@ def login():
             "SELECT * FROM tbl_user WHERE col_username = %s AND col_password = %s",
             (username, password),
         )
-        users = cursor.fetchall()
+        user = cursor.fetchone()
 
-        if users:
+        if user:
             return redirect(url_for("home"))
         else:
             text = "Incorrect Username or Password!"
