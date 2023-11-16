@@ -9,6 +9,10 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css"
+    />
     <style>
       @import url("https://fonts.googleapis.com/css?family=Karla:400,700&display=swap");
 
@@ -106,4 +110,13 @@
     </div>
   </body>
   <script src="{{ url_for('static', filename='LostAndFound_login-reg/js/particle-animation.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+  {% if show_sweetalert %}
+  <script>
+    Swal.fire({
+      title: "{{ text }}",
+      icon: "{{ text_status }}",
+    });
+  </script>
+  {% endif %}
 </html>

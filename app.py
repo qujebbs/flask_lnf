@@ -47,7 +47,7 @@ def register():
         passwd = request.form["password"]
         email = request.form["email"]
 
-        # Check if the username, student number, or email already exist in the database (maya ko nalang ayusin return ang pangit pa)
+        # Check if the username, student number, or email already exist in the database
         cursor.execute(
             "SELECT col_username, col_studNum, col_email FROM tbl_user WHERE col_username = %s OR col_studNum = %s OR col_email = %s",
             (username, studnum, email),
@@ -55,11 +55,32 @@ def register():
         existing_records = cursor.fetchall()
 
         if any(record[0] == username for record in existing_records):
-            return "Username already exists. Please choose a different username."
+            text = "Username already exists. Please choose a different username."
+            text_status = "info"
+            return render_template(
+                "register.html",
+                text=text,
+                text_status=text_status,
+                show_sweetalert=True,
+            )
         elif any(record[1] == studnum for record in existing_records):
-            return "Student number already exists. Please enter a different student number."
+            text = "Student Id already exists. Please use a different Student Id."
+            text_status = "info"
+            return render_template(
+                "register.html",
+                text=text,
+                text_status=text_status,
+                show_sweetalert=True,
+            )
         elif any(record[2] == email for record in existing_records):
-            return "Email already exists. Please enter a different email address."
+            text = "Email already exists. Please enter a different email address."
+            text_status = "info"
+            return render_template(
+                "register.html",
+                text=text,
+                text_status=text_status,
+                show_sweetalert=True,
+            )
 
         # Insert the user into the database
         cursor.execute(
@@ -86,7 +107,11 @@ def login():
         if users:
             return redirect(url_for("home"))
         else:
-            return "Invalid Username and Password combination. Please enter different values.."
+            text = "Incorrect Username or Password!"
+            text_status = "error"
+            return render_template(
+                "login.html", text=text, text_status=text_status, show_sweetalert=True
+            )
 
     return render_template("login.html")
 
