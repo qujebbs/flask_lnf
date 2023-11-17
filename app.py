@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, request
+from flask import Flask, render_template, request, redirect, url_for, request, session
 
 import mysql.connector
 
@@ -7,10 +7,11 @@ app = Flask(
 )
 
 connection = mysql.connector.connect(
-    host="localhost", port="3306", database="lostnfounddb", user="root", password="105671080088"
+    host="localhost", port="3306", database="lostnfounddb", user="root", password=""
 )
 
 cursor = connection.cursor()
+app.secret_key = "your secret key"
 
 
 @app.route("/")
@@ -28,7 +29,12 @@ def register():
         email = request.form["email"]
 
         if password != confirm_password:
-            return render_template("register.html", text="Passwords do not match.", text_status="error", show_sweetalert=True)
+            return render_template(
+                "register.html",
+                text="Passwords do not match.",
+                text_status="error",
+                show_sweetalert=True,
+            )
 
         cursor.execute(
             """
@@ -54,16 +60,24 @@ def register():
                 error_key = "email"
             else:
                 continue
-            return render_template("register.html", text=errors[error_key], text_status="error", show_sweetalert=True)
+            return render_template(
+                "register.html",
+                text=errors[error_key],
+                text_status="error",
+                show_sweetalert=True,
+            )
 
         query = "CALL createUser(%s,%s,%s,%s)"
         cursor.execute(query, (stud_num, username, email, password))
         connection.commit()
         text = "Account created successfully."
         text_status = "success"
-        return render_template("register.html", text=text, text_status=text_status, show_sweetalert=True)
-    
+        return render_template(
+            "register.html", text=text, text_status=text_status, show_sweetalert=True
+        )
+
     return render_template("register.html")
+
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -73,20 +87,27 @@ def login():
         query = "SELECT * FROM tbl_user WHERE col_username = %s AND col_password = %s"
         cursor.execute(query, (username, password))
         user = cursor.fetchone()
-        
+
         if user:
+            session["username"] = username
             return redirect(url_for("home"))
-        
+
         text = "Incorrect Username or Password!"
         text_status = "error"
         show_sweetalert = True
-        
+
     else:
         text = ""
         text_status = ""
         show_sweetalert = False
-        
-    return render_template("login.html", text=text, text_status=text_status, show_sweetalert=show_sweetalert)
+
+    return render_template(
+        "login.html",
+        text=text,
+        text_status=text_status,
+        show_sweetalert=show_sweetalert,
+    )
+
 
 @app.route("/home")
 def home():
@@ -95,7 +116,9 @@ def home():
 
 @app.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html")
+    if "username" in session:
+        return "Welcome %s" % session["username"]
+    return redirect(url_for("login"))
 
 
 @app.route("/claimed.html")
