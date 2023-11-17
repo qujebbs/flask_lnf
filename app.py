@@ -21,83 +21,72 @@ def landing():
 @app.route("/register", methods=["POST", "GET"])
 def register():
     if request.method == "POST":
-        # Get user input from the form and store it in variables
-        studnum = request.form["stud_id"]
+        stud_num = request.form["stud_id"]
         username = request.form["username"]
-        passwd = request.form["password"]
-        confirm_passwd = request.form["confirm_password"]
+        password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
         email = request.form["email"]
 
-        # Check if both passwords match
-        if passwd != confirm_passwd:
-            return render_template(
-                "register.html",
-                text="Passwords do not match.",
-                text_status="error",
-                show_sweetalert=True,
-            )
+        if password != confirm_password:
+            return render_template("register.html", text="Passwords do not match.", text_status="error", show_sweetalert=True)
 
-        # Check if the username, student number, or email already exist in the database
         cursor.execute(
-            "SELECT col_username, col_studNum, col_email FROM tbl_user WHERE col_username = %s OR col_studNum = %s OR col_email = %s",
-            (username, studnum, email),
+            """
+            SELECT col_username, col_studNum, col_email
+            FROM tbl_user
+            WHERE col_username = %s OR col_studNum = %s OR col_email = %s
+            """,
+            (username, stud_num, email),
         )
         existing_records = cursor.fetchall()
         errors = {
             "username": "Username already exists.",
-            "studnum": "Student Id already exists.",
+            "stud_num": "Student Id already exists.",
             "email": "Email address already exists.",
         }
 
-        # Check for errors in the existing records
         for record in existing_records:
             if record[0] == username:
                 error_key = "username"
-            elif record[1] == studnum:
-                error_key = "studnum"
+            elif record[1] == stud_num:
+                error_key = "stud_num"
             elif record[2] == email:
                 error_key = "email"
             else:
                 continue
-            return render_template(
-                "register.html",
-                text=errors[error_key],
-                text_status="error",
-                show_sweetalert=True,
-            )
+            return render_template("register.html", text=errors[error_key], text_status="error", show_sweetalert=True)
 
-        # Insert the user into the database
         query = "CALL createUser(%s,%s,%s,%s)"
-        cursor.execute(query, (studnum, username, email, passwd))
+        cursor.execute(query, (stud_num, username, email, password))
         connection.commit()
         text = "Account created successfully."
         text_status = "success"
-        return render_template(
-            "register.html", text=text, text_status=text_status, show_sweetalert=True
-        )
+        return render_template("register.html", text=text, text_status=text_status, show_sweetalert=True)
+    
     return render_template("register.html")
-
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
         username = request.form.get("username", "")
         password = request.form.get("password", "")
-        cursor.execute(
-            "SELECT * FROM tbl_user WHERE col_username = %s AND col_password = %s",
-            (username, password),
-        )
+        query = "SELECT * FROM tbl_user WHERE col_username = %s AND col_password = %s"
+        cursor.execute(query, (username, password))
         user = cursor.fetchone()
+        
         if user:
             return redirect(url_for("home"))
-        else:
-            text = "Incorrect Username or Password!"
-            text_status = "error"
-            return render_template(
-                "login.html", text=text, text_status=text_status, show_sweetalert=True
-            )
-    return render_template("login.html")
-
+        
+        text = "Incorrect Username or Password!"
+        text_status = "error"
+        show_sweetalert = True
+        
+    else:
+        text = ""
+        text_status = ""
+        show_sweetalert = False
+        
+    return render_template("login.html", text=text, text_status=text_status, show_sweetalert=show_sweetalert)
 
 @app.route("/home")
 def home():
