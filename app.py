@@ -1,8 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, request, session
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 import mysql.connector
 
 app = Flask(
@@ -14,11 +10,7 @@ connection = mysql.connector.connect(
 )
 
 cursor = connection.cursor()
-<<<<<<< Updated upstream
-app.secret_key = "your secret key"
-=======
 app.secret_key = "baltao_da_goat"
->>>>>>> Stashed changes
 
 
 @app.route("/")
@@ -29,24 +21,16 @@ def landing():
 @app.route("/register", methods=["POST", "GET"])
 def register():
     if request.method == "POST":
-<<<<<<< Updated upstream
-        stud_num = request.form["stud_id"]
-=======
         studnum = request.form["stud_id"]
->>>>>>> Stashed changes
         username = request.form["username"]
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
         email = request.form["email"]
 
-<<<<<<< Updated upstream
         if password != confirm_password:
-=======
-        if passwd != confirm_passwd:
             error_message = "Passwords do not match."
             error_status = "error"
             show_sweetalert = True
->>>>>>> Stashed changes
             return render_template(
                 "register.html",
                 text=error_message,
@@ -54,31 +38,20 @@ def register():
                 show_sweetalert=show_sweetalert,
             )
 
-<<<<<<< Updated upstream
-        cursor.execute(
-            """
-            SELECT col_username, col_studNum, col_email
-            FROM tbl_user
-            WHERE col_username = %s OR col_studNum = %s OR col_email = %s
-            """,
-            (username, stud_num, email),
-        )
-=======
         query = "SELECT col_username, col_studNum, col_email FROM tbl_user WHERE col_username = %s OR col_studNum = %s OR col_email = %s"
         cursor.execute(query, (username, studnum, email))
->>>>>>> Stashed changes
         existing_records = cursor.fetchall()
         errors = {
             "username": "Username already exists.",
-            "stud_num": "Student Id already exists.",
+            "studnum": "Student Id already exists.",
             "email": "Email address already exists.",
         }
 
         for record in existing_records:
             if record[0] == username:
                 error_key = "username"
-            elif record[1] == stud_num:
-                error_key = "stud_num"
+            elif record[1] == studnum:
+                error_key = "studnum"
             elif record[2] == email:
                 error_key = "email"
             else:
@@ -94,7 +67,7 @@ def register():
             )
 
         query = "CALL createUser(%s,%s,%s,%s)"
-        cursor.execute(query, (stud_num, username, email, password))
+        cursor.execute(query, (studnum, username, email, password))
         connection.commit()
         text = "Account created successfully."
         text_status = "success"
@@ -119,36 +92,16 @@ def login():
         user = cursor.fetchone()
 
         if user:
-<<<<<<< Updated upstream
-            session["username"] = username
-=======
             session["user"] = user
->>>>>>> Stashed changes
             return redirect(url_for("home"))
 
         text = "Incorrect Username or Password!"
         text_status = "error"
-<<<<<<< Updated upstream
-        show_sweetalert = True
-
-    else:
-        text = ""
-        text_status = ""
-        show_sweetalert = False
-
-    return render_template(
-        "login.html",
-        text=text,
-        text_status=text_status,
-        show_sweetalert=show_sweetalert,
-    )
-=======
         return render_template(
             "login.html", text=text, text_status=text_status, show_sweetalert=True
         )
 
     return render_template("login.html")
->>>>>>> Stashed changes
 
 
 @app.route("/home")
@@ -159,16 +112,6 @@ def home():
         return redirect(url_for("login"))
 
 
-<<<<<<< Updated upstream
-@app.route("/dashboard")
-def dashboard():
-    if "username" in session:
-        return "Welcome %s" % session["username"]
-    return redirect(url_for("login"))
-
-
-@app.route("/claimed.html")
-=======
 @app.route("/all_items")
 def All_items():
     if "user" in session:
@@ -194,7 +137,6 @@ def found():
 
 
 @app.route("/claimed")
->>>>>>> Stashed changes
 def claimed():
     if "user" in session:
         return render_template("Claimed.html")
@@ -202,8 +144,6 @@ def claimed():
         return redirect(url_for("login"))
 
 
-<<<<<<< Updated upstream
-=======
 @app.route("/lost", methods=["POST", "GET"])
 def lost():
     if "user" in session:
@@ -242,6 +182,5 @@ def logout():
     return render_template("login.html")
 
 
->>>>>>> Stashed changes
 if __name__ == "__main__":
     app.run(debug=True)
