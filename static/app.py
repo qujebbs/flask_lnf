@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, request
 import mysql.connector
 
 app = Flask(
-    __name__, static_url_path='', static_folder='static'
+    __name__, static_url_path='', static_folder='static/Lost And Found font-end/public'
 )
 
 connection = mysql.connector.connect(
