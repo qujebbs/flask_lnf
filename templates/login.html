@@ -11,11 +11,6 @@
       rel="stylesheet"
     />
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- SweetAlert CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css"
-    />
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
@@ -49,15 +44,10 @@
           class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32"
         >
           <p class="text-center text-3xl">Welcome.</p>
-          <form
-            class="flex flex-col pt-3 md:pt-8"
-            method="post"
-            action="/login"
-          >
+          <form class="flex flex-col pt-3 md:pt-8" method="post" action="/login">
             <div class="flex flex-col pt-4">
               <label class="text-lg">Username</label>
               <input
-                required
                 type="text"
                 name="username"
                 placeholder="Username"
@@ -68,7 +58,6 @@
             <div class="flex flex-col pt-4">
               <label class="text-lg">Password</label>
               <input
-                required
                 type="password"
                 name="password"
                 placeholder="Password"
@@ -105,18 +94,5 @@
       </div>
     </div>
   </body>
-  <script language="javascript" type="text/javascript">
-    window.history.forward();
-  </script>
   <script src="{{ url_for('static', filename='LostAndFound_login-reg/js/particle-animation.js')}}"></script>
-  <!-- SweetAlert JS -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
-  {% if show_sweetalert %}
-  <script>
-    Swal.fire({
-      title: "{{ text }}",
-      icon: "{{ text_status }}",
-    });
-  </script>
-  {% endif %}
 </html>

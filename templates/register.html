@@ -9,10 +9,6 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css"
-    />
     <style>
       @import url("https://fonts.googleapis.com/css?family=Karla:400,700&display=swap");
 
@@ -30,11 +26,7 @@
           class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32"
         >
           <p class="text-center text-3xl">Join Us.</p>
-          <form
-            class="flex flex-col pt-3 md:pt-8"
-            method="post"
-            action="/register"
-          >
+          <form class="flex flex-col pt-3 md:pt-8" method="post" action="/register">
             <div class="flex flex-col pt-4">
               <label class="text-lg">Student ID</label>
               <input
@@ -42,18 +34,16 @@
                 name="stud_id"
                 placeholder="SUM2021-01384"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
-                required
               />
             </div>
 
             <div class="flex flex-col pt-4">
               <label class="text-lg">email</label>
               <input
-                type="email"
+                type="text"
                 name="email"
                 placeholder="lol@gmail.com"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
-                required
               />
             </div>
 
@@ -64,7 +54,6 @@
                 name="username"
                 placeholder="DragonMaster23"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
-                required
               />
             </div>
 
@@ -75,18 +64,6 @@
                 name="password"
                 placeholder="Password"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-
-            <div class="flex flex-col pt-4">
-              <label class="text-lg">Confirm Password</label>
-              <input
-                type="password"
-                name="confirm_password"
-                placeholder="Confirm Password"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
-                required
               />
             </div>
 
@@ -121,13 +98,4 @@
     </div>
   </body>
   <script src="{{ url_for('static', filename='LostAndFound_login-reg/js/particle-animation.js') }}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
-  {% if show_sweetalert %}
-  <script>
-    Swal.fire({
-      title: "{{ text }}",
-      icon: "{{ text_status }}",
-    });
-  </script>
-  {% endif %}
 </html>
