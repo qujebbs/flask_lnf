@@ -84,7 +84,7 @@
               <div>
                 <a
                   class="inline-flex justify-center whitespace-nowrap rounded-lg bg-indigo-500 px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-indigo-950/10 hover:bg-indigo-600 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 dark:focus-visible:ring-slate-600 transition-colors duration-150 group"
-                  href="./register.php"
+                  href="{{url_for('register')}}"
                 >
                   Register Now
                   <span
@@ -96,7 +96,7 @@
               <div>
                 <a
                   class="inline-flex justify-center whitespace-nowrap rounded-lg bg-slate-700 px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-indigo-950/10 hover:bg-slate-600 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 dark:focus-visible:ring-slate-600 transition-colors duration-150"
-                  href="{{url_for('register')}}"
+                  href="{{url_for('login')}}"
                 >
                   Go to Login
                 </a>
@@ -107,6 +107,6 @@
       </div>
     </main>
     <!-- For Particle -->
-    <script src="{{url_for('static',filename='js/particle-animation.js')}}"></script>
+    <script src="{{ url_for('static', filename='assets/js/particle-animation.js') }}"></script>
   </body>
 </html>
