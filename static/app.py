@@ -1,17 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for, request
+
 import mysql.connector
 
-app = Flask(__name__, static_url_path="", static_folder="static")
+app = Flask(
+    __name__, static_url_path='', static_folder='static/Lost And Found font-end/public'
+)
 
 connection = mysql.connector.connect(
-    host="localhost", port="3306", database="lostnfounddb", user="root", password=""
+    host="localhost", port="3306", database="lostnfounddb", user="root", password="105671080088"
 )
 
 cursor = connection.cursor()
 
+
 @app.route("/")
 def landing():
     return render_template("landing.html")
+
 
 @app.route("/register", methods=["POST", "GET"])
 def register():
@@ -93,6 +98,7 @@ def login():
             )
     return render_template("login.html")
 
+
 @app.route("/home")
 def home():
     return render_template("home.html")
@@ -100,6 +106,7 @@ def home():
 @app.route("/all_items")
 def All_items():
     return render_template("All_items.html")
+
 
 @app.route("/dashboard")
 def dashboard():
@@ -109,34 +116,25 @@ def dashboard():
 def found():
     return render_template("found.html")
 
-
 @app.route("/claimed")
 def claimed():
     return render_template("Claimed.html")
-
 
 @app.route("/lost", methods=["POST", "GET"])
 def lost():
     return render_template("Lost.html")
 
-
 @app.route("/requests")
 def requests():
     return render_template("Requests.html")
-
 
 @app.route("/unclaimed")
 def unclaimed():
     return render_template("Unclaimed.html")
 
-
 @app.route("/logs")
 def logs():
     return render_template("logs.html")
-
-@app.route("/claimed.html")
-def claimed():
-    return render_template("Claimed.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

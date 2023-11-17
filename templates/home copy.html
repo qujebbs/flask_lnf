@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lost And Found</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/css/tailwind.output.css" />
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="./assets/js/init-alpine.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
+    <script src="./assets/js/charts-lines.js" defer></script>
+    <script src="./assets/js/charts-pie.js" defer></script>
+    <script src="./assets/js/index.js " defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.0/dist/alpine.min.js" defer></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.3.x/dist/index.js" defer></script>
+</head>
+
+<body class="bg-white dark:bg-gray-900">
+    <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
+        <!-- Desktop sidebar -->
+        <aside class="fixed h-screen z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block ">
+            <div class="py-4 text-gray-500 dark:text-gray-400">
+                <div class="ml-2 flex items-center">
+                    <a href="./dashboard.html">
+                        <svg class="w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3" />
+                        </svg>
+                    </a>
+                    <a class="ml-3 text-lg font-bold text-gray-800 dark:text-gray-200" href="./dashboard.html">
+                        Lost And Found
+                    </a>
+                </div>
+                <ul class="mt-6 shadow-md">
+                    <li class="relative px-6 py-3">
+                        <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"></span>
+                        <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+                            href="home.html">
+                            <svg class="w-5 h-5 text-purple-600" aria-hidden="true" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                <path
+                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                                </path>
+                            </svg>
+                            <span class="ml-4 text-purple-600">Home</span>
+                        </a>
+                    </li>
+                </ul>
+                <span>
+                    <hr class="w-full ">
+                </span>
+                <ul class="mt-6">
+                    <li class="relative px-6 py-3">
+                        <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+                            href="dashboard.html">
+                            <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                <path
+                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                                </path>
+                            </svg>
+                            <span class="ml-4">Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <!-- Mobile sidebar -->
+        <div x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"></div>
+        <aside class="fixed inset-y-0 z-20 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-white dark:bg-gray-800 md:hidden"
+            x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
+            x-transition:enter-start="opacity-0 transform -translate-x-20" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0 transform -translate-x-20" @click.away="closeSideMenu"
+            @keydown.escape="closeSideMenu">
+            <div class="py-4 text-gray-500 dark:text-gray-400">
+                <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
+                    Lost And Found
+                </a>
+                <ul class="mt-6">
+                    <li class="relative px-6 py-3">
+                        <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"></span>
+                        <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+                            href="home.html">
+                            <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                <path
+                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                                </path>
+                            </svg>
+                            <span class="ml-4">Home</span>
+                        </a>
+                    </li>
+                </ul>
+                <span>
+                    <hr class="w-full ">
+                </span>
+                <ul class="mt-6">
+                    <li class="relative px-6 py-3">
+                        <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+                            href="dashboard.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z" />
+                            </svg>
+                            <span class="ml-4">Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="relative px-6 py-3">
+
+                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            href="All_items.html">
+                            <svg href="All_items.html" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
+                            </svg>
+                            </svg>
+                            <span class="ml-4">All Items</span>
+                        </a>
+                    </li>
+                    <li class="relative px-6 py-3">
+                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            href="Lost.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                            </svg>
+
+                            <span class="ml-4">Lost</span>
+                        </a>
+                    </li>
+                    <li class="relative px-6 py-3">
+                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            href="Found.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                            </svg>
+                            <span class="ml-4">Found</span>
+                        </a>
+                    </li>
+                    <li class="relative px-6 py-3">
+                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            href="Claimed.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                            </svg>
+                            <span class="ml-4">Claimed</span>
+                        </a>
+                    </li>
+                    <li class="relative px-6 py-3">
+                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            href="Unclaimed.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 3l1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 011.743-1.342 48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664L19.5 19.5" />
+                            </svg>
+                            <span class="ml-4">Unclaimed</span>
+                        </a>
+                    </li>
+                    <li class="relative px-6 py-3">
+                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            href="Trash.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                            </svg>
+                            <span class="ml-4">Trash</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <div class="flex flex-col flex-1 w-full">
+            <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
+                <div
+                    class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
+                    <!-- Mobile hamburger -->
+                    <button class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
+                        @click="toggleSideMenu" aria-label="Menu">
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <!-- Search input -->
+                    <div class="flex justify-end flex-1">
+                        <div class=" relative w-full max-w-xl focus-within:text-purple-500">
+                            <div class="absolute inset-y-0 flex items-center pl-2">
+                                <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <input
+                                class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
+                                type="text" placeholder="Search post" aria-label="Search" />
+                        </div>
+                    </div>
+                    <ul class="flex items-center flex-shrink-0 space-x-6">
+                        <!-- Theme toggler -->
+                        <li class="flex">
+                            <button class="rounded-md focus:outline-none focus:shadow-outline-purple"
+                                @click="toggleTheme" aria-label="Toggle color mode">
+                                <template x-if="!dark">
+                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                                        </path>
+                                    </svg>
+                                </template>
+                                <template x-if="dark">
+                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </template>
+                            </button>
+                        </li>
+                        <!--Upload menu-->
+                        <li class="fixed relative inline-block">
+                            <button id="openForm"
+                                class="relative align-middle flex px-2 py-1 rounded-md focus:outline-none focus:shadow-outline-purple border hover:text-purple-600"
+                                aria-label="Notifications">
+
+                                <svg class="w-6 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                                </svg>
+                                <p class=" text-xs mt-1 hover:text-white uppercase">Upload</p>
+                            </button>
+                        </li>
+
+                        <!--Hidden Upload Form-->
+                        <div id="popUpload" class=" hidden fixed inset-0  flex items-center justify-center">
+                            
+                            <div
+                                class="editor gb-color text-gray-800 mx-auto w-full flex flex-col text-white p-4 border-2 shadow-lg max-w-2xl  p-1 rounded-lg shadow-xl dark:bg-slate-800">
+                                <h2 class=" text-center font-bold text-2xl text-gray-800 p-4">Upload Item</h2>
+                                <input
+                                    class=" text-gray-800 title bg-gray-100 border border-green-900 p-2 mb-4 outline-none rounded-md"
+                                    spellcheck="false" placeholder="Lost item name" type="text">
+                                <textarea id="text"
+                                    class="description bg-gray-100 p-3 h-60 border border-green-900  rounded-md"
+                                    spellcheck="false" maxlength="255" placeholder="Describe lost item"></textarea>
+
+                                <!-- icons -->
+                                <div class=" flex text-gray-500 m-2 p-3">
+                                    <div id="counter" class="count ml-auto text-white text-xs font-semibold">0</div>
+                                    <div class="count ml-auto text-white text-xs font-semibold">/255</div>
+                                </div>
+                                <!-- buttons -->
+                                
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
+                                <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
+
+                                <div class=" w-full"> 
+                                    <div class="w-full p-2">
+                                        <label for="date" class="text-black text-xsS">Date Found: </label>
+                                        <input type="date" class="rounded-lg w-full text-sm p-3" id="date" id="myFile" name="dateLost"
+                                            class="text-gray-900 bg-white ">
+                                    </div>
+                                </div>
+
+
+                                <div class="buttons flex ml-auto py-2">
+                                    <button id="closeFormButton"
+                                        class="text-gray-800 btn border-2 border-green-300 rounded-full p-1 px-4 font-semibold text-white ml-auto bg-white  p-1 ">Cancel</button>
+                                    <button
+                                        class="btn border border-white  p-1 px-4 font-semibold text-white rounded-full ml-2 bg-purple-600 p-1 hover:bg-purple-600 hover:text-white ">Post</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Hidden Upload Form-->
+
+                        <!-- Profile menu -->
+                        <li class="relative fixed">
+                            <button
+                                class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none border border-purple-600 p-1"
+                                @click="toggleProfileMenu" @keydown.escape="closeProfileMenu" aria-label="Account"
+                                aria-haspopup="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                </svg>
+
+                            </button>
+                            <template x-if="isProfileMenuOpen">
+                                <ul x-transition:leave="transition ease-in duration-150"
+                                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                    @click.away="closeProfileMenu" @keydown.escape="closeProfileMenu"
+                                    class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700"
+                                    aria-label="submenu">
+
+                                    <div x-data="{photoName: null, photoPreview: null}" class="col-span-6 ml-2 sm:col-span-4 md:mr-3">
+                                        <!-- Photo File Input -->
+                                        <input type="file" class="hidden" x-ref="photo" x-on:change="
+                                                            photoName = $refs.photo.files[0].name;
+                                                            const reader = new FileReader();
+                                                            reader.onload = (e) => {
+                                                                photoPreview = e.target.result;
+                                                            };
+                                                            reader.readAsDataURL($refs.photo.files[0]);
+                                        ">
+                                    <li class="w-full">
+                                        <div class="mt-2" x-show="! photoPreview">
+                                            <svg class="w-full h-32" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                            </svg>
+                                        </div> 
+                                        <!-- New Profile Photo Preview -->
+                                        <div class="mt-2" x-show="photoPreview" style="display: none;">
+                                            <span class="block w-full h-32  m-auto shadow" x-bind:style="'background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url(\'' + photoPreview + '\');'" style="background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url('null');">
+                                            </span>
+                                        </div>
+                                        <button type="button" class="   inline-flex items-center px-2 p-1 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-400 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150 mt-2 ml-3" x-on:click.prevent="$refs.photo.click()">
+                                            Select New Photo
+                                        </button>
+                                        <button type="button" class= "block text-center  inline-flex items-center px-2 p-1 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-400 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150 mt-2 ml-3" >
+                                            Save
+                                        </button>
+                                    </li>
+                                    <li class="flex">
+                                        <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                                            href="#">
+                                            <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path
+                                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                                                </path>
+                                                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            </svg>
+                                            <span>Settings</span>
+                                        </a>
+                                    </li>
+                                    <li class="flex">
+                                        <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                                            href="#">
+                                            <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path
+                                                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
+                                                </path>
+                                            </svg>
+                                            <span>Log out</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </template>
+                        </li>
+                    </ul>
+
+                </div>
+            </header>
+
+            <main>
+                <section class=" h-full lg main md:m-auto ">
+                    <!--Start  of card-->
+                    <div class=" h-screen w-full ">
+                        <h2 class="text-2xl  font-bold p-4">NEWSFEED</h2>
+                        <div
+                            class="md:max-w-2xl mb-8 flex items-center max-w-4xl p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800 border  ">
+                            <div class="cadrs">
+
+                            </div>
+                            <div class="flex h-full">
+                                <div>
+                                    <!-- <div
+                                        class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
+                                        
+                                    </div> -->
+                                </div>
+
+                                <div class="w-full">
+
+                                    <div class="flex gap-6 items-center">
+                                        <div
+                                        class=" text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500 sm:hidden mb-2">
+                                        <img src="dgdg.jpg" alt="prof"/>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <p class="mb-1 text-l font-bold text-gray-600 dark:text-gray-400  ">Name<br>Ivan</p>
+                                        </div>
+                                    </div>
+
+                                    <hr class="mb-4" />
+                                    <p class="text-gray-100 text-sm py-3">Posted by: </p>
+                                    <div class="flex justify-between py-3">
+                                        
+                                        <p class="text-gray-500 m-2 py-1">Contact No.1121323</p>
+                                        <p class="text-gray-500 py-1">mm/dd/yyyy</p>
+                                    </div>
+
+                                    <p class="mb-2 text-sm font-bold text-gray-600 dark:text-gray-400">
+                                        Item Name: I.D
+                                    </p>
+                                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400 block">
+                                        <b>Item Description:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                                        Architecto ab deserunt Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                                        Culpa beatae eos, enim sequi sint voluptatibus saepe tenetur hic nisi assumenda
+                                        architecto iure sed aperiam necessitatibus rem possimus officiis ex accusantium Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum eligendi nostrum molestiae consequatur aut alias.
+
+                                    </p>
+                                    
+                                    <div class=" max-w-4xl p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
+                                        <div class="mx-auto">
+                                            <div class="items-center">
+                                                <img class="mx-auto img" src="./assets/img/dashboard.png" alt="sg">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end Card -->
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+
+                    <!--Start of card-->
+                    <div class=" h-screen w-full">
+                        <div
+                            class="md:max-w-2xl mb-8 flex items-center max-w-4xl p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800 border  ">
+                            <div class="cadrs">
+
+                            </div>
+                            <div class="flex h-full">
+                                <div>
+                                    <!-- <div
+                                        class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
+                                        
+                                    </div> -->
+                                </div>
+
+                                <div class="w-full">
+
+                                    <div class="flex gap-6">
+                                        <div
+                                        class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500 sm:hidden">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                        <p class="mb-2 text-l font-bold text-gray-600 dark:text-gray-400  ">Name</p>
+                                        
+                                    </div>
+
+                                    <hr class="mb-4" />
+                                    <div class="flex justify-between">
+                                        <p class="text-gray-500">Contact No.1121323</p>
+                                        <p class="text-gray-500">mm/dd/yyyy</p>
+                                    </div>
+
+                                    <p class="mb-2 text-sm font-bold text-gray-600 dark:text-gray-400">
+                                        Item Name: I.D
+                                    </p>
+                                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400 block">
+                                        <b>Item Description:</b> Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                                        Architecto ab deserunt Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                                        Culpa beatae eos, enim sequi sint voluptatibus saepe tenetur hic nisi assumenda
+                                        architecto iure sed aperiam necessitatibus rem possimus officiis ex accusantium Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum eligendi nostrum molestiae consequatur aut alias.
+
+                                    </p>
+                                    
+                                    <div class=" max-w-4xl p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
+                                        <div class="mx-auto">
+                                            <div class="items-center">
+                                                <img class="mx-auto img" src="./assets/img/dashboard.png" alt="sg">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card -->
+
+                </section>
+            </main>
+        </div>
+    </div>
+
+</body>
+
+
+
+</html>
