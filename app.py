@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, request
-
 import mysql.connector
 
 app = Flask(
@@ -7,16 +6,14 @@ app = Flask(
 )
 
 connection = mysql.connector.connect(
-    host="localhost", port="3306", database="lostnfounddb", user="root", password="105671080088"
+    host="localhost", port="3306", database="lostnfounddb", user="root", password=""
 )
 
 cursor = connection.cursor()
 
-
 @app.route("/")
 def landing():
     return render_template("landing.html")
-
 
 @app.route("/register", methods=["POST", "GET"])
 def register():
@@ -98,21 +95,17 @@ def login():
             )
     return render_template("login.html")
 
-
 @app.route("/home")
 def home():
     return render_template("home.html")
-
 
 @app.route("/dashboard")
 def dashboard():
     return render_template("dashboard.html")
 
-
 @app.route("/claimed.html")
 def claimed():
     return render_template("Claimed.html")
-
 
 if __name__ == "__main__":
     app.run(debug=True)
