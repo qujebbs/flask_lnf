@@ -1,11 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, request, session
 import mysql.connector
+import os
 
 app = Flask(__name__, static_url_path="", static_folder="static")
 
 connection = mysql.connector.connect(
-    host="localhost", port="3306", database="lostnfounddb", user="root", password=""
+    host="localhost", port="3306", database="lostnfounddb", user="root", password="105671080088"
 )
+
+PICS_FOLDER = os.path.join(app.root_path, 'static/pics')
+app.config['UPLOAD_FOLDER'] = PICS_FOLDER
 
 cursor = connection.cursor()
 app.secret_key = "baltao_da_goat"
@@ -182,6 +186,35 @@ def logout():
     session.pop("user", None)
     return render_template("login.html")
 
+@app.route("/upload", methods=["POST"])
+def upload():
+    if request.method == "POST":
+        item_name = request.form["item_name"]
+        description = request.form["description"]
+        pictures = request.files.getlist("pics")
+        user_id = 3
+        user_role = 'user'
+        tbl = 'user'
+
+        if item_name and description and pictures:
+                query = "call createpost(%s,%s,%s,%s)"
+                cursor.execute(query, (item_name, description, user_id, user_role))
+                cursor.execute("select last_insert_id() from tbl_lostpost limit 1")
+                postid = cursor.fetchone()[0]
+
+                for pic in pictures:
+                    file_name = (pic.filename)
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
+
+                    query = "call insertpic(%s,%s,%s)"
+                    cursor.execute(query, (postid, file_path, tbl))
+
+                    pic.save(file_path)
+
+                connection.commit()
+                return "Upload successful"
+
+    return "Missing Data"
 
 if __name__ == "__main__":
     app.run(debug=True)
