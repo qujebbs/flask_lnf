@@ -9,7 +9,6 @@ connection = mysql.connector.connect(
 
 cursor = connection.cursor()
 
-
 @app.route("/")
 def landing():
     return render_template("landing.html")
