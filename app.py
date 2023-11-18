@@ -110,6 +110,7 @@ def home():
         return redirect(url_for("login"))
 
 
+
 @app.route("/all_items")
 def All_items():
     if "user" in session:
@@ -118,12 +119,14 @@ def All_items():
         return redirect(url_for("login"))
 
 
+
 @app.route("/dashboard")
 def dashboard():
     if "user" in session:
         return render_template("dashboard.html")
     else:
         return redirect(url_for("login"))
+
 
 
 @app.route("/found")
