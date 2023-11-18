@@ -4,8 +4,7 @@ import mysql.connector
 app = Flask(__name__, static_url_path="", static_folder="static")
 
 connection = mysql.connector.connect(
-    host="localhost", port="3306", database="lostnfounddb", user="root", password=""
-)
+    host="localhost", port="3306", database="lostnfounddb", user="root", password="")
 
 cursor = connection.cursor()
 
@@ -94,11 +93,20 @@ def login():
             )
     return render_template("login.html")
 
+@app.route('/')
+def show_items():
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM items")
+    items = cursor.fetchall()
+    return render_template('items.html', items=items)
 
 @app.route("/home")
 def home():
     return render_template("home.html")
 
+@app.route("/users")
+def users():
+    return render_template("logs.html")
 
 @app.route("/all_items")
 def All_items():
@@ -129,16 +137,13 @@ def lost():
 def requests():
     return render_template("Requests.html")
 
-
 @app.route("/unclaimed")
 def unclaimed():
     return render_template("Unclaimed.html")
 
-
 @app.route("/logs")
 def logs():
     return render_template("logs.html")
-
 
 if __name__ == "__main__":
     app.run(debug=True)
