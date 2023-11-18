@@ -95,6 +95,8 @@ def login():
 
         if user:
             session["user"] = user
+            session["user_id"] = user[0]
+            session["user_role"] = user[5]
             return redirect(url_for("home"))
 
         text = "Incorrect Username or Password!"
@@ -109,6 +111,9 @@ def login():
 @app.route("/home")
 def home():
     if "user" in session:
+
+        print(session["user_id"])
+        print(session["user_role"])
         return render_template("home.html")
     else:
         return redirect(url_for("login"))
@@ -188,13 +193,15 @@ def logout():
 
 @app.route("/upload", methods=["POST"])
 def upload():
+    if session["user_role"] == 2:
+        user_role = 'user'
+    elif session["user_role"] == 1:
+        user_role = 'admin'
     if request.method == "POST":
         item_name = request.form["item_name"]
         description = request.form["description"]
         pictures = request.files.getlist("pics")
         user_id = 3
-        user_role = 'user'
-        tbl = 'user'
 
         if item_name and description and pictures:
                 query = "call createpost(%s,%s,%s,%s)"
@@ -207,7 +214,7 @@ def upload():
                     file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
 
                     query = "call insertpic(%s,%s,%s)"
-                    cursor.execute(query, (postid, file_path, tbl))
+                    cursor.execute(query, (postid, file_path, user_role))
 
                     pic.save(file_path)
 
