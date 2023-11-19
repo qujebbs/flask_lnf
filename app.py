@@ -1,11 +1,16 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from flask import Flask, render_template, request, redirect, url_for, request, session
 import mysql.connector
+import os
 
 app = Flask(__name__, static_url_path="", static_folder="static")
 
 connection = mysql.connector.connect(
-    host="localhost", port="3306", database="lostnfounddb", user="root", password=""
-)
+    host="localhost", port="3306", database="lostnfounddb", user="root", password="")
+
+PICS_FOLDER = os.path.join(app.root_path, "static/pics")
+app.config["UPLOAD_FOLDER"] = PICS_FOLDER
 
 cursor = connection.cursor()
 app.secret_key = "baltao_da_goat"
@@ -16,7 +21,7 @@ def landing():
     return render_template("landing.html")
 
 
-@app.route("/register", methods=["POST", "GET"])
+@app.route("/register", methods=["POST"])
 def register():
     if request.method == "POST":
         studnum = request.form["stud_id"]
@@ -65,7 +70,7 @@ def register():
             )
 
         query = "CALL createUser(%s,%s,%s,%s)"
-        cursor.execute(query, (studnum, username, email, password))
+        cursor.execute(query, (studnum, password, email, username))
         connection.commit()
         text = "Account created successfully."
         text_status = "success"
@@ -80,7 +85,7 @@ def register():
     return render_template("register.html")
 
 
-@app.route("/login", methods=["POST", "GET"])
+@app.route("/login", methods=["POST"])
 def login():
     if request.method == "POST":
         username = request.form.get("username", "")
@@ -91,6 +96,8 @@ def login():
 
         if user:
             session["user"] = user
+            session["user_id"] = user[0]
+            session["user_role"] = user[5]
             return redirect(url_for("home"))
 
         text = "Incorrect Username or Password!"
@@ -101,6 +108,12 @@ def login():
 
     return render_template("login.html")
 
+@app.route('/')
+def show_items():
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM items")
+    items = cursor.fetchall()
+    return render_template('items.html', items=items)
 
 @app.route("/home")
 def home():
@@ -109,6 +122,9 @@ def home():
     else:
         return redirect(url_for("login"))
 
+@app.route("/users")
+def users():
+    return render_template("logs.html")
 
 @app.route("/all_items")
 def All_items():
@@ -157,14 +173,12 @@ def requests():
     else:
         return redirect(url_for("login"))
 
-
 @app.route("/unclaimed")
 def unclaimed():
     if "user" in session:
         return render_template("Unclaimed.html")
     else:
         return redirect(url_for("login"))
-
 
 @app.route("/logs")
 def logs():
@@ -179,6 +193,48 @@ def logout():
     session.pop("user", None)
     return render_template("login.html")
 
+
+@app.route("/upload", methods=["POST"])
+def upload():
+    if session["user_role"] == 2:
+        user_role = "user"
+    elif session["user_role"] == 1:
+        user_role = "admin"
+    if request.method == "POST":
+        item_name = request.form["item_name"]
+        description = request.form["description"]
+        pictures = request.files.getlist("pics")
+        user_id = 3
+
+        if item_name and description and pictures:
+            query = "call createpost(%s,%s,%s,%s)"
+            cursor.execute(query, (item_name, description, user_id, user_role))
+            cursor.execute("select last_insert_id() from tbl_lostpost limit 1")
+            postid = cursor.fetchone()[0]
+
+            for pic in pictures:
+                file_name = pic.filename
+                file_path = os.path.join(app.config["UPLOAD_FOLDER"], file_name)
+
+                query = "call insertpic(%s,%s,%s)"
+                cursor.execute(query, (postid, file_path, user_role))
+
+                pic.save(file_path)
+
+            connection.commit()
+            return render_template(
+                "dashboard.html",
+                text="Upload Successful.",
+                text_status="success",
+                show_sweetalert=True,
+            )
+
+    return render_template(
+        "dashboard.html",
+        text="Incorrect Username or Password!",
+        text_status="error",
+        show_sweetalert=True,
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
