@@ -18,25 +18,25 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                        {% for item in items %}
+                        {% for row in items %}
                         <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3">
                                 <div class="flex items-center text-sm">
                                     <div>
-                                        <p class="font-semibold">{{ item.username }}</p>
+                                        <p class="font-semibold">{{ row[0] }}</p>
                                         <p class="text-xs text-gray-600 dark:text-gray-400">
-                                            {{ item.name }}
+                                            {{ row[1] }}
                                         </p>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ item.contact }}<br>
-                                <span class="underline text-blue-500">{{ item.email }}</span>
+                                {{ row[2] }}<br>
+                                <span class="underline text-blue-500">{{ row[3] }}</span>
                             </td>
                             <td class="px-4 py-3 text-xs">
                                 <span class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
-                                    {{ item.status }}
+                                    {{ row[4] }}
                                 </span>
                             </td>
                             <td>
@@ -51,7 +51,7 @@
                                 <!-- ... (modal code) ... -->
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ item.date }}
+                                {{ row[3] }}
                             </td>
                             <td class="px-4 py-3">
                                 <!-- Delete Button -->

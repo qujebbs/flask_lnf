@@ -124,7 +124,10 @@ def show_items():
 @app.route("/home")
 def home():
     if "user" in session:
-        return render_template("home.html")
+        query = "SELECT u.col_username, lp.col_itemName, lp.col_itemDescription, u.col_email, s.col_statusName FROM tbl_lostpost as lp JOIN tbl_user as u on lp.col_userID = u.col_userID JOIN tbl_status as s on lp.col_statusID = s.col_statusID"
+        cursor.execute(query)
+        value = cursor.fetchall()
+        return render_template("home.html", items=value)
     else:
         return redirect(url_for("login"))
 
