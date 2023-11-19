@@ -7,8 +7,7 @@ import os
 app = Flask(__name__, static_url_path="", static_folder="static")
 
 connection = mysql.connector.connect(
-    host="localhost", port="3306", database="lostnfounddb", user="root", password=""
-)
+    host="localhost", port="3306", database="lostnfounddb", user="root", password="")
 
 PICS_FOLDER = os.path.join(app.root_path, "static/pics")
 app.config["UPLOAD_FOLDER"] = PICS_FOLDER
@@ -109,6 +108,12 @@ def login():
 
     return render_template("login.html")
 
+@app.route('/')
+def show_items():
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM items")
+    items = cursor.fetchall()
+    return render_template('items.html', items=items)
 
 @app.route("/home")
 def home():
@@ -117,6 +122,9 @@ def home():
     else:
         return redirect(url_for("login"))
 
+@app.route("/users")
+def users():
+    return render_template("logs.html")
 
 @app.route("/all_items")
 def All_items():
@@ -165,14 +173,12 @@ def requests():
     else:
         return redirect(url_for("login"))
 
-
 @app.route("/unclaimed")
 def unclaimed():
     if "user" in session:
         return render_template("Unclaimed.html")
     else:
         return redirect(url_for("login"))
-
 
 @app.route("/logs")
 def logs():
@@ -229,7 +235,6 @@ def upload():
         text_status="error",
         show_sweetalert=True,
     )
-
 
 if __name__ == "__main__":
     app.run(debug=True)
