@@ -211,8 +211,10 @@ def logout():
 def upload():
     if session["user_role"] == 2:
         user_role = "user"
+        statusID = 2
     elif session["user_role"] == 1:
         user_role = "admin"
+        statusID = 1
     if request.method == "POST":
         item_name = request.form["item_name"]
         description = request.form["description"]
@@ -220,9 +222,13 @@ def upload():
         user_id = 3
 
         if item_name and description and pictures:
-            query = "call createpost(%s,%s,%s,%s)"
-            cursor.execute(query, (item_name, description, user_id, user_role))
-            cursor.execute("select last_insert_id() from tbl_lostpost limit 1")
+            query = "call createpost(%s,%s,%s,%s,%s)"
+            cursor.execute(
+                query, (item_name, description, statusID, user_id, user_role)
+            )
+            cursor.execute(
+                "SELECT last_insert_id() AS 'postID' FROM tbl_foundpost LIMIT 1"
+            )
             postid = cursor.fetchone()[0]
 
             for pic in pictures:
