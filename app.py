@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 from flask import Flask, render_template, request, redirect, url_for, request, session
 import mysql.connector
 import os
@@ -32,14 +30,10 @@ def register():
         email = request.form["email"]
 
         if password != confirm_password:
-            error_message = "Passwords do not match."
-            error_status = "error"
-            show_sweetalert = True
-            return render_template(
+            return render_with_alert(
                 "register.html",
-                text=error_message,
-                text_status=error_status,
-                show_sweetalert=show_sweetalert,
+                text="Passwords do not match.",
+                text_status="error",
                 studnum=studnum,
                 username=username,
                 email=email,
@@ -63,27 +57,19 @@ def register():
                 error_key = "email"
             else:
                 continue
-            error_message = errors[error_key]
-            error_status = "error"
-            show_sweetalert = True
-            return render_template(
+            return render_with_alert(
                 "register.html",
-                text=error_message,
-                text_status=error_status,
-                show_sweetalert=show_sweetalert,
+                text=errors[error_key],
+                text_status="error",
             )
 
         query = "CALL createUser(%s,%s,%s,%s)"
         cursor.execute(query, (studnum, password, email, username))
         connection.commit()
-        text = "Account created successfully."
-        text_status = "success"
-        show_sweetalert = True
-        return render_template(
+        return render_with_alert(
             "register.html",
-            text=text,
-            text_status=text_status,
-            show_sweetalert=show_sweetalert,
+            text="Account created successfully.",
+            text_status="success",
         )
 
     return render_template("register.html")
@@ -104,10 +90,10 @@ def login():
             session["user_role"] = user[5]
             return redirect(url_for("home"))
 
-        text = "Incorrect Username or Password!"
-        text_status = "error"
-        return render_template(
-            "login.html", text=text, text_status=text_status, show_sweetalert=True
+        return render_with_alert(
+            "login.html",
+            text="Incorrect Username or Password!",
+            text_status="error",
         )
 
     return render_template("login.html")
@@ -241,19 +227,21 @@ def upload():
                 pic.save(file_path)
 
             connection.commit()
-            return render_template(
+            return render_with_alert(
                 "dashboard.html",
                 text="Upload Successful.",
                 text_status="success",
-                show_sweetalert=True,
             )
 
-    return render_template(
+    return render_with_alert(
         "dashboard.html",
         text="Incorrect Username or Password!",
         text_status="error",
-        show_sweetalert=True,
     )
+
+
+def render_with_alert(template, **kwargs):
+    return render_template(template, show_sweetalert=True, **kwargs)
 
 
 if __name__ == "__main__":
