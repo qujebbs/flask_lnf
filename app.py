@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, request, s
 import bcrypt
 import mysql.connector
 import os
+import secrets
+import smtplib
+from email.mime.text import MIMEText
 
 app = Flask(__name__, static_url_path="", static_folder="static")
 
@@ -14,6 +17,7 @@ app.config["UPLOAD_FOLDER"] = PICS_FOLDER
 
 cursor = connection.cursor()
 app.secret_key = "baltao_da_goat"
+token = secrets.token_urlsafe(32)
 
 
 @app.route("/")
@@ -93,9 +97,7 @@ def login():
             return redirect(url_for("home"))
 
         return render_with_alert(
-            "login.html",
-            text="Incorrect Username or Password!",
-            text_status="error",
+            "login.html", text="Incorrect Username or Password!", text_status="error"
         )
 
     return render_template("login.html")
@@ -234,12 +236,52 @@ def upload():
     )
 
 
+@app.route("/forgot_password", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "POST":
+        email = request.form["email"]
+
+        # Check if the email exists in the database
+        query = "SELECT * FROM tbl_user WHERE col_email = %s"
+        cursor.execute(query, (email,))
+        user = cursor.fetchone()
+
+        if user:
+            token = secrets.token_hex(16)
+            send_password_reset_email(user[4], user[3], token)
+
+        else:
+            print("Email not found")
+        return render_template(
+            "forgot-password.html", message="Password reset email sent."
+        )
+
+    # Render the forgot password form
+    return render_template("forgot-password.html")
+
+
+def send_password_reset_email(email, hashed_password, token):
+    sender_email = "johnmiller.asz8@gmail.com"  # Replace with your email address
+    password = "utkk gxyl whdq grgt"  # Replace with your email password
+
+    # Compose the email message
+    subject = "Password Reset"
+    # body = f"Click the link below to reset your password:\n\nhttp://example.com/reset_password?token={token}"
+    body = f"Your password is: {hashed_password}"
+    message = MIMEText(body)
+    message["Subject"] = subject
+    message["From"] = sender_email
+    message["To"] = email
+
+    # Send the email
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()
+        server.login(sender_email, password)
+        server.send_message(message)
+
+
 def render_with_alert(template, **kwargs):
     return render_template(template, show_sweetalert=True, **kwargs)
-
-
-def check_password(hashed_password, user_password):
-    return bcrypt.checkpw(user_password, hashed_password)
 
 
 if __name__ == "__main__":
