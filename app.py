@@ -103,13 +103,13 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/home")
+@app.route("/dashboard", methods=["POST", "GET"])
 def home():
     if "user" in session:
         query = "SELECT u.col_username, lp.col_itemName, lp.col_itemDescription, u.col_email, lp.col_date, lp.col_postID FROM tbl_lostpost as lp JOIN tbl_user as u on lp.col_userID = u.col_userID;"
         cursor.execute(query)
         value = cursor.fetchall()
-        return render_template("home.html", items=value)
+        return render_template("dashboard.html", items=value)
     else:
         return redirect(url_for("login"))
 
@@ -123,14 +123,6 @@ def users():
 def All_items():
     if "user" in session:
         return render_template("all_items.html")
-    else:
-        return redirect(url_for("login"))
-
-
-@app.route("/dashboard")
-def dashboard():
-    if "user" in session:
-        return render_template("dashboard.html")
     else:
         return redirect(url_for("login"))
 
