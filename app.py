@@ -9,7 +9,7 @@ from email.mime.text import MIMEText
 app = Flask(__name__, static_url_path="", static_folder="static")
 
 connection = mysql.connector.connect(
-    host="localhost", port="3306", database="lostnfounddb", user="root", password=""
+    host="localhost", port="3306", database="lostnfounddb", user="root", password="dragonBallz029"
 )
 
 PICS_FOLDER = os.path.join(app.root_path, "static/pics")
@@ -106,7 +106,7 @@ def login():
 @app.route("/home")
 def home():
     if "user" in session:
-        query = "SELECT u.col_username, lp.col_itemName, lp.col_itemDescription, u.col_email, s.col_statusName, lp.col_date FROM tbl_lostpost as lp JOIN tbl_user as u on lp.col_userID = u.col_userID JOIN tbl_status as s on lp.col_statusID = s.col_statusID;"
+        query = "SELECT u.col_username, lp.col_itemName, lp.col_itemDescription, u.col_email, lp.col_date, lp.col_postID FROM tbl_lostpost as lp JOIN tbl_user as u on lp.col_userID = u.col_userID;"
         cursor.execute(query)
         value = cursor.fetchall()
         return render_template("home.html", items=value)
