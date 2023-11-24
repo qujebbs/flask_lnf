@@ -116,7 +116,7 @@ def home():
 
 @app.route("/users")
 def users():
-    return render_template("logs.html")
+    return render_template("users.html")
 
 
 @app.route("/all_items")
@@ -126,7 +126,13 @@ def All_items():
     else:
         return redirect(url_for("login"))
 
-
+@app.route("/posts")
+def posts():
+    if "user" in session:
+        return render_template("mypost.html")
+    else:
+        return redirect(url_for("login"))
+    
 @app.route("/found")
 def found():
     if "user" in session:
