@@ -9,7 +9,7 @@ from email.mime.text import MIMEText
 app = Flask(__name__, static_url_path="", static_folder="static")
 
 connection = mysql.connector.connect(
-    host="localhost", port="3306", database="lostnfounddb", user="root", password=""
+    host="localhost", port="3306", database="lostandfound", user="root", password="105671080088"
 )
 
 PICS_FOLDER = os.path.join(app.root_path, "static/pics")
@@ -94,7 +94,7 @@ def login():
 
         if user and bcrypt.checkpw(password, user[3].encode("utf-8")):
             session.update({"user": user, "user_id": user[0], "user_role": user[5]})
-            return redirect(url_for("home"))
+            return redirect(url_for("dashboard"))
 
         return render_with_alert(
             "login.html", text="Incorrect Username or Password!", text_status="error"
@@ -103,21 +103,6 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/home")
-def home():
-    if "user" in session:
-        query = "SELECT u.col_username, lp.col_itemName, lp.col_itemDescription, u.col_email, s.col_statusName, lp.col_date FROM tbl_lostpost as lp JOIN tbl_user as u on lp.col_userID = u.col_userID JOIN tbl_status as s on lp.col_statusID = s.col_statusID;"
-        cursor.execute(query)
-        value = cursor.fetchall()
-        return render_template("home.html", items=value)
-    else:
-        return redirect(url_for("login"))
-
-
-@app.route("/users")
-def users():
-    return render_template("logs.html")
-
 
 @app.route("/all_items")
 def All_items():
@@ -125,7 +110,13 @@ def All_items():
         return render_template("all_items.html")
     else:
         return redirect(url_for("login"))
-
+    
+@app.route("/mypost")
+def mypost():
+    if "user" in session:
+        return render_template("mypost.html")
+    else:
+        return redirect(url_for("login"))
 
 @app.route("/dashboard")
 def dashboard():
@@ -142,6 +133,12 @@ def found():
     else:
         return redirect(url_for("login"))
 
+@app.route("/users")
+def users():
+    if "user" in session:
+        return render_template("users.html")
+    else:
+        return redirect(url_for("login"))
 
 @app.route("/claimed")
 def claimed():
