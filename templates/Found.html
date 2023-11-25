@@ -2,10 +2,10 @@
 {% block content %}
 <div class="flex flex-col flex-1 w-full">
     <main class="h-full overflow-y-auto">
-                <div class="container px-4 grid mb-6 place-items-center">
-                    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"> Welcome!! Lost</h2>
-                    <div class="grid h-auto md:grid-cols-4  xl:grid-cols-3 gap-6  hover:cursor-pointer">
-                        <!--Start of Cards-->
+            <div class="container px-4 grid mb-6 place-items-center">
+                <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"></h2>
+                <div class="grid h-auto md:grid-cols-3  xl:grid-cols-4 gap-6  hover:cursor-pointer">
+                    <!--Start of Cards-->
                         <a href="{{ url_for('routes.lost.los')}}">
                             <div class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
                                     <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
@@ -25,132 +25,69 @@
                                 </div>
                             </div>
                         </a>
-                        <!-- Card -->
-                        <a href="{{ url_for('routes.found.foun')}}">
-                            <div class="flex items-center h-32 border p-4 bg-blue-100 rounded-lg shadow-xl dark:bg-gray-800">
-                                <div
-                                    class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-    
-                                </div>
-                                <div>
-                                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                                        Found
-                                    </p>
-                                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                                        376
-                                    </p>
-                                </div>
+                    <!-- Card -->
+                    <a href="{{ url_for('routes.found.foun')}}">
+                        <div class="flex items-center h-32 border p-4 bg-blue-100 rounded-lg shadow-xl dark:bg-gray-800">
+                            <div
+                                class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+
                             </div>
-                        </a>
-                        <!-- Card -->
-                        <a href="{{url_for('routes.claimed.claime')}}">
-                            <div class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
-                                <div
-                                    class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                    </svg>
-    
-                                </div>
-                                <div>
-                                    <p class="mb-2 text-md font-medium text-gray-600 dark:text-gray-400">
-                                        Claimed
-                                    </p>
-                                    <p class="text-2xl font-bold text-gray-700 dark:text-gray-200">
-                                        35
-                                    </p>
-                                </div>
-                            </div>   
-                        </a>
-                        <!--End of Cards-->
-                    </div>
-                </div>
-
-
- <!-- News Feed -->
- <div class="container px-6 mx-auto mb-6 grid ">
-    <div class="grid h-auto md:grid-cols-2 xl:grid-cols-3  hover:cursor-pointer">
-        <!--Start of Cards-->
-        <div class="grid col-span-2  ">
-            <div class="flex items-center h-auto shadow-xl p-6 bg-gray-100  dark:bg-gray-800">
-                
-                <div class="p-2 descCont ">
-                    <div width="100%" class="">
-                        <div class="flex justify-between">
-                            <h1 class="font-bold dark:text-white">Item Name</h1>
-                            <button id="markC" type="button" class="bg-teal-500 rounded-full flex items-center text-xs p-1"><img  width="20" height="20" src="{{url_for('static', filename='assets/img/ball-triangle.svg')}}"/> Mark Claimed</button> 
+                            <div>
+                                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                                    Found
+                                </p>
+                                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                                    376
+                                </p>
+                            </div>
                         </div>
-                        <div class="flex justify-between ">
-                            <p class="textDesc text-sm font-medium text-gray-600 dark:text-gray-400 ">
-                                dzdfgd
-                            </p>
-                            <p class="dark:text-white">YYY/MM/DD</p>
-                        </div>
-                    </div>
-                    <p class="textDesc text-sm font-semibold text-gray-700 dark:text-gray-200">
-                        example@gmail.com
-                    </p>
-                    <p class="textDesc text-sm font-light py-2 text-gray-700 dark:text-gray-200 ">
-                        </p>
-                </div>
-            </div>
-        </div>
-        <div id="mark-claimed" class="hidden z-50 fixed inset-0 shadow-2xl  flex items-center justify-center">
-            <div
-                class="editor bg-white text-gray-800 mx-auto w-full flex flex-col text-white p-4 border-2 shadow-lg max-w-2xl  p-1 rounded-lg shadow-xl dark:bg-slate-800">
-                <h2 class=" text-center font-bold text-2xl text-gray-800 p-4">Enter Username</h2>
-                <input class=" text-gray-800  title bg-gray-100 border border-green-900 p-2 outline-none rounded-md" required placeholder="username required ro mark as claimed" type="text">
-                <div class="buttons flex ml-auto py-2">
-                    <button id="closeVer"
-                        class="text-gray-800 btn border-2 border-green-300 rounded-full p-1 px-4 font-semibold text-white ml-auto bg-white  p-1 ">Cancel</button>
-                    <button id="btnVer" type="submit"
-                        class="btn border border-white  p-1 px-4 font-semibold text-white rounded-full ml-2 bg-purple-600 p-1 hover:bg-purple-600 hover:text-white ">Save</button>
-                </div>
-            </div>
-        </div>
-        <!-- Card -->
-        <div class=" flex items-center justify-between h-auto border-b w-full p-4 bg-white rounded-b-lg dark:bg-gray-800 ">
-            <div  id="openmodal" class="cursor-pointer">
-                    <img  width="250" height="150" class="img rounded-lg sm:hidden ml-6" src="{{url_for('static', filename='assets/img/registerbg.png')}}" alt="gf"/>
-            </div>
-            <div class="p-3 mr-4 text-teal-500 bg-red-100 border rounded-full  dark:text-teal-100 dark:bg-teal-500">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-black">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                </svg>
-            </div>
-        </div> 
-            
-            <!-- The Modal -->
-            <div id="modalimg" class="hidden fixed inset-0 z-50 shadow-2xl  flex items-center justify-center">  
-                
-                <div style="height: 400px;" id="modalimgCont" class="editor bg-white text-gray-800  mx-auto w-full flex flex-col text-white border-2 shadow-lg max-w-2xl  rounded-lg shadow-xl dark:bg-slate-800">
-                    <div class="relative"><span id="close" style="font-size: 30px;" class="xbtn cursor-pointer absolute right-0 text-white text-2xl mr-2">&times;</span></div>
-                    <div class="buttons p-4 ">  
-                        <img  src="{{url_for('static', filename='assets/img/registerbg.png')}}" alt="">
-                        <img src="{{url_for('static', filename='assets/img/registerbg.png')}}" alt="">
-                        <img  src="{{url_for('static', filename='assets/img/registerbg.png')}}" alt="">
-                        <img src="{{url_for('static', filename='assets/img/registerbg.png')}}" alt="">
-                        <img  src="{{url_for('static', filename='assets/img/registerbg.png')}}" alt="">
-                        <img src="{{url_for('static', filename='assets/img/registerbg.png')}}" alt="">
-                    </div>
-                </div>
-                
-            </div>
+                    </a>
+                    <!-- Card -->
+                    <a href="{{url_for('routes.claimed.claime')}}">
+                        <div class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
+                            <div
+                                class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                </svg>
 
-            
-        <!--End of Cards-->
+                            </div>
+                            <div>
+                                <p class="mb-2 text-md font-medium text-gray-600 dark:text-gray-400">
+                                    Claimed
+                                </p>
+                                <p class="text-2xl font-bold text-gray-700 dark:text-gray-200">
+                                    35
+                                </p>
+                            </div>
+                        </div>   
+                    </a>
+                    <!--End of Cards-->
+                </div>
+            </div>
+<!-- news feed here -->   
+<div class="card">
+    <img src="{{url_for('static', filename='assets/img/login-office.jpeg')}}" alt="Lost Pic" style="width:100%">
+    <div class="container">
+      <h4><b>Username</b></h4> 
+      <h5>Title</h5>
+      <p>Description</p> 
+      <p>Date</p>
+      <button class="btn"> Claimed
+    </button>
+    <button class="btn"> Delete
+    </button>
     </div>
+  </div>
+</main>
 </div>
-<!-- News Feed -->
-    </main>
+</main>
 </div>
 {% endblock %}
