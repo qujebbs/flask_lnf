@@ -111,14 +111,14 @@ def All_items():
     else:
         return redirect(url_for("login"))
     
-@app.route("/mypost")
+@app.route("/mypost", methods=["GET", "POST"])
 def mypost():
     if "user" in session:
         return render_template("mypost.html")
     else:
         return redirect(url_for("login"))
 
-@app.route("/dashboard")
+@app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
     if "user" in session:
         return render_template("dashboard.html")
@@ -133,14 +133,14 @@ def found():
     else:
         return redirect(url_for("login"))
 
-@app.route("/users")
+@app.route("/users", methods=["GET", "POST"])
 def users():
     if "user" in session:
         return render_template("users.html")
     else:
         return redirect(url_for("login"))
 
-@app.route("/claimed")
+@app.route("/claimed" , methods=["GET", "POST"])
 def claimed():
     if "user" in session:
         return render_template("Claimed.html")
