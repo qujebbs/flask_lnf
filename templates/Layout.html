@@ -212,7 +212,7 @@
 
                          <!--Hidden Upload Form-->
 
-                        <form action="/upload">
+                        <form action="/upload" method="post" enctype="multipart/form-data">
                             <div id="popUpload" class="hidden fixed inset-0 shadow-2xl  flex items-center justify-center">
                                 
                                 <div
@@ -233,7 +233,7 @@
                                     </div>
                                     <!-- buttons -->
                                     
-                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file limit (10 MB per file)<span id="hiddenTxt" style="color: red;" class="ml-4"></span></label>
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="fileInput">Upload file limit (10 MB per file)<span id="hiddenTxt" style="color: red;" class="ml-4"></span></label>
                                     <input id="fileInput" name="pics" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" multiple="true" type="file">
                                 
 

@@ -11,28 +11,26 @@ posts = Blueprint('posts', __name__)
 
 app = Flask(__name__)
 
-PICS_FOLDER = os.path.join(app.root_path, "static/pics")
+PICS_FOLDER = os.path.join(app.root_path, "pics")
 app.config["UPLOAD_FOLDER"] = PICS_FOLDER
 
-@posts.route("/upload", methods=["GET", "POST"])
+@posts.route("/upload", methods=["POST"])
 def upload():
     if not is_user_logged_in():
         return redirect(url_for("routes.authentication.login"))
-    
-    user_data, user_id, user_role = get_current_user_data()
-    if session.get(user_role) == 2:
+    user, user_id, user_role = get_current_user_data()
+    if user_role == 2:
         user_role = "user"
         statusID = 2
-    elif session.get(user_role) == 1:
+    elif user_role == 1:
         user_role = "admin"
         statusID = 1
     if request.method == "POST":
         item_name = request.form["item_name"]
         description = request.form["description"]
         pictures = request.files.getlist("pics")
-        user_id = 3
+        user_id = user_id
         cursor, connection = get_cursor()
-
         if item_name and description and pictures:
             query = "call createpost(%s,%s,%s,%s,%s)"
             cursor.execute(
@@ -59,8 +57,8 @@ def upload():
                 text_status="success",
             )
         
-    return render_with_alert(
-        "dashboard.html",
-        text="Incorrect Username or Password!",
-        text_status="error",
-    )
+    # return render_with_alert(
+    #     "dashboard.html",
+    #     text="Incorrect Username or Password!",
+    #     text_status="error",
+    # )
