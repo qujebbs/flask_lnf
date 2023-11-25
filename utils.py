@@ -34,7 +34,7 @@ def log_in_user(user, user_id, user_role):
 
 
 def log_out_user():
-    session.pop("user", None)
+    session.clear()
 
 
 def get_current_user_data():

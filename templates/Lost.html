@@ -72,20 +72,28 @@
                 </div>
             </div>
                     <!--End of Cards-->     
-                    <!-- news feed here -->   
-<div class="card">
-    <img src="{{url_for('static', filename='assets/img/login-office.jpeg')}}" alt="Lost Pic" style="width:100%">
-    <div class="container">
-      <h4><b>Username</b></h4> 
-      <h5>Title</h5>
-      <p>Description</p> 
-      <p>Date</p>
-      <button class="btn"> Found
-    </button>
-    <button class="btn"> Delete
-    </button>
-    </div>
-  </div>
+                    <!-- news feed here -->
+{% for item in items %}
+        <div class="card">
+            <img src="{{ item[5] }}" alt="Lost Pic" style="width:100%">
+            <div class="container">
+            <h4><b>{{ item[0]}}</b></h4> 
+            <h5>{{ item[1]}}</h5>
+            <p>{{ item[2]}}</p> 
+            <p>{{ item[4]}}</p>
+            <button class="btn"> Found
+            </button>
+            <button class="btn"> Delete
+            </button>
+            </div>
+        </div>
+{% endfor %}
 </main>
 </div>
 {% endblock %}
+
+<!-- 
+<h4><b>Username</b></h4> 
+<h5>Title</h5>
+<p>Description</p> 
+<p>Date</p> -->

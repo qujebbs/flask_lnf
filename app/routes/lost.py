@@ -12,5 +12,10 @@ lost = Blueprint('lost', __name__)
 def los():
         if not is_user_logged_in():
             return redirect(url_for("authentication.login"))
-    
-        return render_template("Lost.html")
+        
+
+        cursor, connection = get_cursor()
+        query = "SELECT u.colUsername, lp.colItemName, lp.colItemDesc, u.colEmail, lp.colDatePosted, pic.colPicURI FROM tbl_items AS lp JOIN tbl_user AS u ON lp.colPosterID = u.colUserID JOIN tbl_item_pic AS pic ON lp.colItemID = pic.colItemID;"
+        cursor.execute(query)
+        value = cursor.fetchall()
+        return render_template("Lost.html", items=value)
