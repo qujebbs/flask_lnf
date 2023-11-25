@@ -1,13 +1,15 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 from flask import Flask, render_template, request, redirect, url_for, request, session
+import bcrypt
 import mysql.connector
 import os
+import secrets
+import smtplib
+from email.mime.text import MIMEText
 
 app = Flask(__name__, static_url_path="", static_folder="static")
 
 connection = mysql.connector.connect(
-    host="localhost", port="3306", database="lostnfounddb", user="root", password=""
+    host="localhost", port="3306", database="lostandfound", user="root", password="105671080088"
 )
 
 PICS_FOLDER = os.path.join(app.root_path, "static/pics")
@@ -15,6 +17,7 @@ app.config["UPLOAD_FOLDER"] = PICS_FOLDER
 
 cursor = connection.cursor()
 app.secret_key = "baltao_da_goat"
+token = secrets.token_urlsafe(32)
 
 
 @app.route("/")
@@ -27,27 +30,30 @@ def register():
     if request.method == "POST":
         studnum = request.form["stud_id"]
         username = request.form["username"]
-        password = request.form["password"]
-        confirm_password = request.form["confirm_password"]
+        password = request.form["password"].encode("utf-8")
+        confirm_password = request.form["confirm_password"].encode("utf-8")
         email = request.form["email"]
 
-        if password != confirm_password:
-            error_message = "Passwords do not match."
-            error_status = "error"
-            show_sweetalert = True
-            return render_template(
-                "register.html",
-                text=error_message,
-                text_status=error_status,
-                show_sweetalert=show_sweetalert,
-                studnum=studnum,
-                username=username,
-                email=email,
-            )
+        error_checks = [
+            (len(password) < 8, "Password should be at least 8 characters long."),
+            (password != confirm_password, "Passwords do not match."),
+        ]
+
+        for check, message in error_checks:
+            if check:
+                return render_with_alert(
+                    "register.html",
+                    text=message,
+                    text_status="error",
+                    studnum=studnum,
+                    username=username,
+                    email=email,
+                )
 
         query = "SELECT col_username, col_studNum, col_email FROM tbl_user WHERE col_username = %s OR col_studNum = %s OR col_email = %s"
         cursor.execute(query, (username, studnum, email))
         existing_records = cursor.fetchall()
+
         errors = {
             "username": "Username already exists.",
             "studnum": "Student Id already exists.",
@@ -55,35 +61,23 @@ def register():
         }
 
         for record in existing_records:
-            if record[0] == username:
-                error_key = "username"
-            elif record[1] == studnum:
-                error_key = "studnum"
-            elif record[2] == email:
-                error_key = "email"
-            else:
-                continue
-            error_message = errors[error_key]
-            error_status = "error"
-            show_sweetalert = True
-            return render_template(
-                "register.html",
-                text=error_message,
-                text_status=error_status,
-                show_sweetalert=show_sweetalert,
-            )
+            for i, error_key in enumerate(errors.keys()):
+                if record[i] == locals()[error_key]:
+                    return render_with_alert(
+                        "register.html",
+                        text=errors[error_key],
+                        text_status="error",
+                    )
 
+        hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
         query = "CALL createUser(%s,%s,%s,%s)"
-        cursor.execute(query, (studnum, password, email, username))
+        cursor.execute(query, (studnum, hashed_password, email, username))
         connection.commit()
-        text = "Account created successfully."
-        text_status = "success"
-        show_sweetalert = True
-        return render_template(
+
+        return render_with_alert(
             "register.html",
-            text=text,
-            text_status=text_status,
-            show_sweetalert=show_sweetalert,
+            text="Account created successfully.",
+            text_status="success",
         )
 
     return render_template("register.html")
@@ -93,48 +87,21 @@ def register():
 def login():
     if request.method == "POST":
         username = request.form.get("username", "")
-        password = request.form.get("password", "")
-        query = "SELECT * FROM tbl_user WHERE col_username = %s AND col_password = %s"
-        cursor.execute(query, (username, password))
+        password = request.form.get("password", "").encode("utf-8")
+        query = "SELECT * FROM tbl_user WHERE col_username = %s "
+        cursor.execute(query, (username,))
         user = cursor.fetchone()
 
-        if user:
-            session["user"] = user
-            session["user_id"] = user[0]
-            session["user_role"] = user[5]
-            return redirect(url_for("home"))
+        if user and bcrypt.checkpw(password, user[3].encode("utf-8")):
+            session.update({"user": user, "user_id": user[0], "user_role": user[5]})
+            return redirect(url_for("dashboard"))
 
-        text = "Incorrect Username or Password!"
-        text_status = "error"
-        return render_template(
-            "login.html", text=text, text_status=text_status, show_sweetalert=True
+        return render_with_alert(
+            "login.html", text="Incorrect Username or Password!", text_status="error"
         )
 
     return render_template("login.html")
 
-
-@app.route("/")
-def show_items():
-    cursor = connection.cursor()
-    cursor.execute("SELECT * FROM items")
-    items = cursor.fetchall()
-    return render_template("items.html", items=items)
-
-
-@app.route("/home")
-def home():
-    if "user" in session:
-        query = "SELECT u.col_username, lp.col_itemName, lp.col_itemDescription, u.col_email, s.col_statusName, lp.col_date FROM tbl_lostpost as lp JOIN tbl_user as u on lp.col_userID = u.col_userID JOIN tbl_status as s on lp.col_statusID = s.col_statusID;"
-        cursor.execute(query)
-        value = cursor.fetchall()
-        return render_template("home.html", items=value)
-    else:
-        return redirect(url_for("login"))
-
-
-@app.route("/users")
-def users():
-    return render_template("logs.html")
 
 
 @app.route("/all_items")
@@ -143,7 +110,13 @@ def All_items():
         return render_template("all_items.html")
     else:
         return redirect(url_for("login"))
-
+    
+@app.route("/mypost")
+def mypost():
+    if "user" in session:
+        return render_template("mypost.html")
+    else:
+        return redirect(url_for("login"))
 
 @app.route("/dashboard")
 def dashboard():
@@ -160,6 +133,12 @@ def found():
     else:
         return redirect(url_for("login"))
 
+@app.route("/users")
+def users():
+    if "user" in session:
+        return render_template("users.html")
+    else:
+        return redirect(url_for("login"))
 
 @app.route("/claimed")
 def claimed():
@@ -241,19 +220,65 @@ def upload():
                 pic.save(file_path)
 
             connection.commit()
-            return render_template(
+            return render_with_alert(
                 "dashboard.html",
                 text="Upload Successful.",
                 text_status="success",
-                show_sweetalert=True,
             )
 
-    return render_template(
+    return render_with_alert(
         "dashboard.html",
         text="Incorrect Username or Password!",
         text_status="error",
-        show_sweetalert=True,
     )
+
+
+@app.route("/forgot_password", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "POST":
+        email = request.form["email"]
+
+        # Check if the email exists in the database
+        query = "SELECT * FROM tbl_user WHERE col_email = %s"
+        cursor.execute(query, (email,))
+        user = cursor.fetchone()
+
+        if user:
+            token = secrets.token_hex(16)
+            send_password_reset_email(user[4], user[3], token)
+
+        else:
+            print("Email not found")
+        return render_template(
+            "forgot-password.html", message="Password reset email sent."
+        )
+
+    # Render the forgot password form
+    return render_template("forgot-password.html")
+
+
+def send_password_reset_email(email, hashed_password, token):
+    sender_email = "johnmiller.asz8@gmail.com"  # Replace with your email address
+    password = "utkk gxyl whdq grgt"  # Replace with your email password
+
+    # Compose the email message
+    subject = "Password Reset"
+    # body = f"Click the link below to reset your password:\n\nhttp://example.com/reset_password?token={token}"
+    body = f"Your password is: {hashed_password}"
+    message = MIMEText(body)
+    message["Subject"] = subject
+    message["From"] = sender_email
+    message["To"] = email
+
+    # Send the email
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()
+        server.login(sender_email, password)
+        server.send_message(message)
+
+
+def render_with_alert(template, **kwargs):
+    return render_template(template, show_sweetalert=True, **kwargs)
 
 
 if __name__ == "__main__":
