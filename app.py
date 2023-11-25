@@ -20,7 +20,7 @@ if __name__ == "__main__":
 # app = Flask(__name__, static_url_path="", static_folder="static", template_folder="templates")
 
 # connection = mysql.connector.connect(
-#     host="localhost", port="3306", database="lostandfound", user="root", password="105671080088"
+#     host="localhost", port="3306", database="lostnfounddb", user="root", password="dragonBallz029"
 # )
 
 # # PICS_FOLDER = os.path.join(app.root_path, "static/pics")
