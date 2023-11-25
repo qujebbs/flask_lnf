@@ -21,10 +21,8 @@ def upload():
     user, user_id, user_role = get_current_user_data()
     if user_role == 2:
         user_role = "user"
-        statusID = 2
     elif user_role == 1:
         user_role = "admin"
-        statusID = 1
     if request.method == "POST":
         item_name = request.form["item_name"]
         description = request.form["description"]
@@ -32,12 +30,12 @@ def upload():
         user_id = user_id
         cursor, connection = get_cursor()
         if item_name and description and pictures:
-            query = "call createpost(%s,%s,%s,%s,%s)"
+            query = "call createNewItem(%s,%s,%s,%s)"
             cursor.execute(
-                query, (item_name, description, statusID, user_id, user_role)
+                query, (item_name, description, user_id, user_role)
             )
             cursor.execute(
-                "SELECT last_insert_id() AS 'postID' FROM tbl_foundpost LIMIT 1"
+                "SELECT last_insert_id() AS 'postID' FROM tbl_items  LIMIT 1;"
             )
             postid = cursor.fetchone()[0]
 
@@ -45,8 +43,8 @@ def upload():
                 file_name = pic.filename
                 file_path = os.path.join(app.config["UPLOAD_FOLDER"], file_name)
 
-                query = "call insertpic(%s,%s,%s)"
-                cursor.execute(query, (postid, file_path, user_role))
+                query = "call insertNewPic(%s,%s)"
+                cursor.execute(query, (postid, file_path))
 
                 pic.save(file_path)
 

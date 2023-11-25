@@ -13,14 +13,14 @@ def login():
     if request.method == "POST":
         username = request.form.get("username", "")
         password = request.form.get("password", "").encode("utf-8")
-        query = "SELECT * FROM tbl_user WHERE col_username = %s "
+        query = "SELECT * FROM tbl_user WHERE colUsername = %s "
         cursor, connection = get_cursor()
         cursor.execute(query, (username,))
         user = cursor.fetchone()
 
         if user and bcrypt.checkpw(password, user[3].encode("utf-8")):
-            session.update({"user": user, "user_id": user[0], "user_role": user[5]})
-            log_in_user(user, user[0], user[5])
+            session.update({"user": user, "user_id": user[0], "user_role": user[4]})
+            log_in_user(user, user[0], user[4])
             return redirect(url_for("routes.dashboard.dashboar"))
 
         return render_with_alert(
@@ -54,13 +54,12 @@ def register():
                     email=email,
                 )
 
-        query = "SELECT col_username, col_studNum, col_email FROM tbl_user WHERE col_username = %s OR col_studNum = %s OR col_email = %s"
-        cursor.execute(query, (username, studnum, email))
+        query = "SELECT colUsername, colEmail FROM tbl_user WHERE colUsername = %s OR colEmail = %s"
+        cursor.execute(query, (username, email))
         existing_records = cursor.fetchall()
 
         errors = {
             "username": "Username already exists.",
-            "studnum": "Student Id already exists.",
             "email": "Email address already exists.",
         }
 
@@ -74,8 +73,9 @@ def register():
                     )
 
         hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
-        query = "CALL createUser(%s,%s,%s,%s)"
-        cursor.execute(query, (studnum, hashed_password, email, username))
+        query = "CALL createUser(%s,%s,%s)"
+        cursor.execute(query, (hashed_password, email, username))
+        # cursor.execute("SELECT last_insert_id() AS 'userID' FROM tbl_user LIMIT 1;")
         connection.commit()
 
         return render_with_alert(
