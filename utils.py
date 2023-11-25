@@ -26,4 +26,8 @@ def log_out_user():
     session.pop("user", None)
 
 def get_current_user_data():
-    return session.get("user", "user_id", "user_id", "user_role")
+    user = session.get("user")
+    user_id = session.get("user_id")
+    user_role = session.get("user_role")
+
+    return user, user_id, user_role

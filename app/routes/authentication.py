@@ -37,8 +37,7 @@ def register():
         password = request.form["password"].encode("utf-8")
         confirm_password = request.form["confirm_password"].encode("utf-8")
         email = request.form["email"]
-        cursor = get_cursor
-        connection = get_connection
+        cursor, connection = get_cursor()
         error_checks = [
             (len(password) < 8, "Password should be at least 8 characters long."),
             (password != confirm_password, "Passwords do not match."),

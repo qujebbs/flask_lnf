@@ -1,6 +1,7 @@
 # from app import app
 from flask import Flask, render_template, request, redirect, url_for, request, session
 from app.routes import routes_blueprint
+import os
 
 app = Flask(__name__, static_url_path="", static_folder="static", template_folder="templates")
 
