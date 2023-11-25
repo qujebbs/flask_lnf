@@ -19,7 +19,6 @@ cursor = connection.cursor()
 app.secret_key = "baltao_da_goat"
 token = secrets.token_urlsafe(32)
 
-
 @app.route("/")
 def landing():
     return render_template("landing.html")
