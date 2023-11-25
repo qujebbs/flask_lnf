@@ -6,7 +6,7 @@
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"> Welcome!! Lost</h2>
                     <div class="grid h-auto md:grid-cols-4  xl:grid-cols-3 gap-6  hover:cursor-pointer">
                         <!--Start of Cards-->
-                        <a href="{{ url_for('found')}}">
+                        <a href="{{ url_for('routes.lost.los')}}">
                             <div class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
                                     <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -26,7 +26,7 @@
                             </div>
                         </a>
                         <!-- Card -->
-                        <a href="{{ url_for('found')}}">
+                        <a href="{{ url_for('routes.found.foun')}}">
                             <div class="flex items-center h-32 border p-4 bg-blue-100 rounded-lg shadow-xl dark:bg-gray-800">
                                 <div
                                     class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
@@ -48,7 +48,7 @@
                             </div>
                         </a>
                         <!-- Card -->
-                        <a href="{{url_for('claimed')}}">
+                        <a href="{{url_for('routes.claimed.claime')}}">
                             <div class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
                                 <div
                                     class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
@@ -85,7 +85,7 @@
                     <div width="100%" class="">
                         <div class="flex justify-between">
                             <h1 class="font-bold dark:text-white">Item Name</h1>
-                            <button id="markC" type="button" class="bg-teal-500 rounded-full flex items-center text-xs p-1"><img  width="20" height="20" src="../LostAndFoundPHP/assets/img/svg-loaders/ball-triangle.svg"/> Mark Claimed</button> 
+                            <button id="markC" type="button" class="bg-teal-500 rounded-full flex items-center text-xs p-1"><img  width="20" height="20" src="{{url_for('static', filename='assets/img/ball-triangle.svg')}}"/> Mark Claimed</button> 
                         </div>
                         <div class="flex justify-between ">
                             <p class="textDesc text-sm font-medium text-gray-600 dark:text-gray-400 ">
