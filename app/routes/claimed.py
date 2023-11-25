@@ -9,8 +9,8 @@ from utils import get_connection, get_cursor, close_connection, is_user_logged_i
 claimed = Blueprint('claimed', __name__)
 
 @claimed.route("/claimed" , methods=["GET", "POST"])
-def claimed():
+def claime():
     if not is_user_logged_in():
-        return redirect(url_for("login"))
+        return redirect(url_for("authentication.login"))
     
     return render_template("Claimed.html")

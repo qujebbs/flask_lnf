@@ -14,15 +14,14 @@ def login():
         username = request.form.get("username", "")
         password = request.form.get("password", "").encode("utf-8")
         query = "SELECT * FROM tbl_user WHERE col_username = %s "
-        cursor = get_cursor
-        connection = get_connection
+        cursor, connection = get_cursor()
         cursor.execute(query, (username,))
         user = cursor.fetchone()
 
         if user and bcrypt.checkpw(password, user[3].encode("utf-8")):
             session.update({"user": user, "user_id": user[0], "user_role": user[5]})
             log_in_user(user, user[0], user[5])
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("routes.dashboard.dashboar"))
 
         return render_with_alert(
             "login.html", text="Incorrect Username or Password!", text_status="error"
@@ -112,6 +111,29 @@ def send_password_reset_email(email, hashed_password, token):
         server.login(sender_email, password)
         server.send_message(message)
 
+@authentication.route("/forgot_password", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "POST":
+        email = request.form["email"]
+        cursor = get_cursor
+        connection = get_connection
+        # Check if the email exists in the database
+        query = "SELECT * FROM tbl_user WHERE col_email = %s"
+        cursor.execute(query, (email,))
+        user = cursor.fetchone()
+
+        if user:
+            token = secrets.token_hex(16)
+            send_password_reset_email(user[4], user[3], token)
+
+        else:
+            print("Email not found")
+        return render_template(
+            "forgot-password.html", message="Password reset email sent."
+        )
+
+    # Render the forgot password form
+    return render_template("forgot-password.html")
 
 def render_with_alert(template, **kwargs):
     return render_template(template, show_sweetalert=True, **kwargs)

@@ -10,7 +10,7 @@
                     <!-- Cards -->
                     <div class="grid gap-6 h-auto md:grid-cols-2 xl:grid-cols-3  hover:cursor-pointer">
 
-                        <a href="{{ url_for('lost')}}">
+                        <a href="{{ url_for('routes.lost.los')}}">
                         <div class="flex items-center h-32 border  p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
                                 <div
                                     class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
@@ -32,7 +32,7 @@
                         </div>
                         </a>
                         <!-- Card -->
-                        <a href="{{ url_for('found')}}">
+                        <a href="{{ url_for('routes.found.foun')}}">
                         <div class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
                             <div
                                 class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
@@ -53,7 +53,7 @@
                             </div>
                         </div>
                      </a>
-                        <a href="{{url_for('claimed')}}">
+                        <a href="{{url_for('routes.claimed.claime')}}">
                         <div class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
                             <div
                                 class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
