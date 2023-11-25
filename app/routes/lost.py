@@ -18,4 +18,6 @@ def los():
         query = "SELECT u.colUsername, lp.colItemName, lp.colItemDesc, u.colEmail, lp.colDatePosted, pic.colPicURI FROM tbl_items AS lp JOIN tbl_user AS u ON lp.colPosterID = u.colUserID JOIN tbl_item_pic AS pic ON lp.colItemID = pic.colItemID;"
         cursor.execute(query)
         value = cursor.fetchall()
-        return render_template("Lost.html", items=value)
+        img_paths = [row[5] for row in value]
+        img_path = [path.replace('\\', '/') for path in img_paths]
+        return render_template("Lost.html", items=value, paths=img_path)

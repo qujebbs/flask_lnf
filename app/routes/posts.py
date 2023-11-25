@@ -11,7 +11,7 @@ posts = Blueprint('posts', __name__)
 
 app = Flask(__name__)
 
-PICS_FOLDER = os.path.join(app.root_path, "pics")
+PICS_FOLDER = "pics"
 app.config["UPLOAD_FOLDER"] = PICS_FOLDER
 
 @posts.route("/upload", methods=["POST"])
@@ -43,10 +43,11 @@ def upload():
                 file_name = pic.filename
                 file_path = os.path.join(app.config["UPLOAD_FOLDER"], file_name)
 
+                newfile_path = os.path.join(r"C:\Users\fajar\OneDrive\Desktop\flask_lnf\static", file_path)
                 query = "call insertNewPic(%s,%s)"
                 cursor.execute(query, (postid, file_path))
 
-                pic.save(file_path)
+                pic.save(newfile_path)
 
             connection.commit()
             return render_with_alert(
