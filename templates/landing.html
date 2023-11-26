@@ -7,6 +7,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/css/landing.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
@@ -14,6 +22,10 @@
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
     ></script>
     <script>
       tailwind.config = {
@@ -111,7 +123,7 @@
   <!-- Sticky Scroll Section -->
   <div class="relative font-inter antialiased">
     <div
-      class="relative min-h-screen flex flex-col justify-center bg-slate-50 overflow-hidden supports-[overflow:clip]:overflow-clip"
+      class="relative min-h-screen flex flex-col bg-purple-200 overflow-hidden supports-[overflow:clip]:overflow-clip"
     >
       <div class="w-full max-w-6xl mx-auto px-4 md:px-6 py-24">
         <!-- Scroll Animation -->
@@ -312,8 +324,70 @@
                 </div>
               </div>
             </section>
+            <section
+              class="lg:absolute lg:inset-0 lg:z-[var(--stick-visibility)] footer-content"
+            >
+              <div
+                class="flex flex-col lg:min-h-full lg:flex-row space-y-4 space-y-reverse lg:space-y-0 lg:space-x-20"
+              >
+                <div
+                  class="flex-1 flex items-center lg:opacity-[var(--stick-visibility)] transition-opacity duration-300 order-1 lg:order-none"
+                >
+                  <div class="space-y-3">
+                    <div
+                      class="relative inline-flex text-indigo-500 font-semibold"
+                    >
+                      <h3>Our Station</h3>
+                      <svg
+                        class="fill-indigo-300 absolute top-full w-full"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="166"
+                        height="4"
+                      >
+                        <path
+                          d="M98.865 1.961c-8.893.024-17.475.085-25.716.182-2.812.019-5.023.083-7.622.116l-6.554.067a2910.9 2910.9 0 0 0-25.989.38c-4.04.067-7.709.167-11.292.27l-1.34.038c-2.587.073-4.924.168-7.762.22-2.838.051-6.054.079-9.363.095-1.994.007-2.91-.08-3.106-.225l-.028-.028c-.325-.253.203-.463 1.559-.62l.618-.059c.206-.02.42-.038.665-.054l1.502-.089 3.257-.17 2.677-.132c.902-.043 1.814-.085 2.744-.126l1.408-.06c4.688-.205 10.095-.353 16.167-.444C37.413 1.22 42.753.98 49.12.824l1.614-.037C54.041.707 57.588.647 61.27.6l1.586-.02c4.25-.051 8.53-.1 12.872-.14C80.266.4 84.912.373 89.667.354l2.866-.01c8.639-.034 17.996 0 27.322.03 6.413.006 13.168.046 20.237.12l2.368.027c1.733.014 3.653.05 5.712.105l2.068.064c5.89.191 9.025.377 11.823.64l.924.09c.802.078 1.541.156 2.21.233 1.892.233.29.343-3.235.364l-3.057.02c-.446.003-.89.008-1.33.014a305.77 305.77 0 0 1-4.33-.004c-2.917-.005-5.864-.018-8.783-.019l-4.982.003a447.91 447.91 0 0 1-3.932-.02l-4.644-.023-4.647-.014c-9.167-.026-18.341-.028-26.923.03l-.469-.043Z"
+                        />
+                      </svg>
+                    </div>
+                    <div class="mb-3">
+                      <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d728.615465247942!2d120.93997008129237!3d15.449155573733375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397287fb8d2c149%3A0x3920b643170735dc!2sCWXR%2BP5C%20NEUST%20CICT%20Building%2C%20Cabanatuan%20City%2C%20Nueva%20Ecija!5e0!3m2!1sen!2sph!4v1701000915585!5m2!1sen!2sph"
+                        width="800"
+                        height="600"
+                        style="border: 0"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        frameborder="0"
+                      ></iframe>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
+        <footer>
+          <div class="footer-content">
+            <ul class="socials">
+              <li>
+                <a href="#"><i class="fa fa-facebook"></i></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-google-plus"></i></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-youtube"></i></a>
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-linkedin-square"></i></a>
+              </li>
+            </ul>
+          </div>
+        </footer>
         <!-- End: Scroll Animation -->
       </div>
     </div>
@@ -323,4 +397,6 @@
   <script src="{{ url_for('static', filename='assets/js/particle-animation.js') }}"></script>
   <!-- For Scroll -->
   <script src="{{ url_for('static', filename='assets/js/sticky-scrolling.js') }}"></script>
+  <!-- For BG Animation -->
+  <script src="{{ url_for('static', filename='assets/js/bg-scroll.js') }}"></script>
 </html>
