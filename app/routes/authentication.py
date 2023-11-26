@@ -51,52 +51,63 @@ def login():
 def register():
     if request.method == "POST":
         username = request.form["username"]
-        password = request.form["password"].encode("utf-8")
-        confirm_password = request.form["confirm_password"].encode("utf-8")
+        password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
         email = request.form["email"]
+
+        def check_password(password, confirm_password):
+            if len(password) < 8:
+                return False, "Password should be at least 8 characters long."
+            if password != confirm_password:
+                return False, "Passwords do not match."
+            if not (
+                any(char.islower() for char in password)
+                and any(char.isupper() for char in password)
+                and any(char.isdigit() for char in password)
+            ):
+                return (
+                    False,
+                    "Password should contain at least one Lowercase letter, one Uppercase letter and one digit.",
+                )
+            return True, ""
+
+        password_check, message = check_password(password, confirm_password)
+        if not password_check:
+            return render_with_alert("register.html", text=message, text_status="error")
+
         with get_connection() as connection:
             cursor = connection.cursor()
-            error_checks = [
-                (len(password) < 8, "Password should be at least 8 characters long."),
-                (password != confirm_password, "Passwords do not match."),
-            ]
+            password = password.encode("utf-8")  # Re-encode the password as bytes
+            query = "SELECT colUsername, colEmail FROM tbl_user WHERE colUsername = %s OR colEmail = %s"
+            cursor.execute(query, (username, email))
+            existing_records = cursor.fetchall()
 
-        for check, message in error_checks:
-            if check:
-                return render_with_alert(
-                    "register.html",
-                    text=message,
-                )
+            errors = {
+                "username": "Username already exists.",
+                "email": "Email address already exists.",
+            }
 
-        query = "SELECT colUsername, colEmail FROM tbl_user WHERE colUsername = %s OR colEmail = %s"
-        cursor.execute(query, (username, email))
-        existing_records = cursor.fetchall()
+            for record in existing_records:
+                for error_key, error_message in errors.items():
+                    if record[0] == username and error_key == "username":
+                        return render_with_alert(
+                            "register.html", text=error_message, text_status="error"
+                        )
+                    if record[1] == email and error_key == "email":
+                        return render_with_alert(
+                            "register.html", text=error_message, text_status="error"
+                        )
 
-        errors = {
-            "username": "Username already exists.",
-            "email": "Email address already exists.",
-        }
+            hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+            query = "CALL createUser(%s,%s,%s)"
+            cursor.execute(query, (hashed_password, email, username))
+            connection.commit()
 
-        for record in existing_records:
-            for i, error_key in enumerate(errors.keys()):
-                if record[i] == locals()[error_key]:
-                    return render_with_alert(
-                        "register.html",
-                        text=errors[error_key],
-                        text_status="error",
-                    )
-
-        hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
-        query = "CALL createUser(%s,%s,%s)"
-        cursor.execute(query, (hashed_password, email, username))
-        # cursor.execute("SELECT last_insert_id() AS 'userID' FROM tbl_user LIMIT 1;")
-        connection.commit()
-
-        return render_with_alert(
-            "register.html",
-            text="Account created successfully.",
-            text_status="success",
-        )
+            return render_with_alert(
+                "register.html",
+                text="Account created successfully.",
+                text_status="success",
+            )
 
     return render_template("register.html")
 
@@ -155,13 +166,18 @@ def forgot_username():
             user = cursor.fetchone()
 
         if user:
-            token = secrets.token_hex(16)
             send_password_reset_email(user[2], user[1])
         else:
-            print("Username not found")
+            return render_with_alert(
+                "forgot_username.html",
+                text="No email found.",
+                text_status="info",
+            )
 
-        return render_template(
-            "forgot_username.html", message="Password reset email sent."
+        return render_with_alert(
+            "login.html",
+            text="Username sent in your email.",
+            text_status="success",
         )
 
     return render_template("forgot_username.html")

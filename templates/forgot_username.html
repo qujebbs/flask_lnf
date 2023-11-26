@@ -75,13 +75,14 @@
       </div>
     </div>
   </body>
+  <!-- SweetAlert JS -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
-{% if show_sweetalert %}
-<script>
-  Swal.fire({
-    title: "{{ text }}",
-    icon: "{{ text_status }}",
-  });
-</script>
-{% endif %}
+  {% if show_sweetalert %}
+  <script>
+    Swal.fire({
+      title: "{{ text }}",
+      icon: "{{ text_status }}",
+    });
+  </script>
+  {% endif %}
 </html>
