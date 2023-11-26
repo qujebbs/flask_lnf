@@ -75,9 +75,13 @@ def mark_as_found(post_id):
 
 @posts.route('/mark_as_claimed/<int:post_id>', methods=['POST', 'GET'])
 def mark_as_claimed(post_id):
+
+    user, user_id, user_role = get_current_user_data()
     cursor, connection = get_cursor()
     update_query = "update tbl_items set colStatusID = 4 where colItemID = %s"
     cursor.execute(update_query, (post_id,))
+    input_query = "insert into tbl_claimed(colItemID, colUserID) values(%s,%s)"
+    cursor.execute(input_query, (post_id, user_id))
     connection.commit()
     cursor.close()
     return redirect(url_for('routes.dashboard.dashboar'))
@@ -86,7 +90,9 @@ def mark_as_claimed(post_id):
 def mark_as_unclaimed(post_id):
     cursor, connection = get_cursor()
     update_query = "update tbl_items set colStatusID = 3 where colItemID = %s"
+    delete_query = "DELETE FROM tbl_claimed WHERE colItemID = %s;"
     cursor.execute(update_query, (post_id,))
+    cursor.execute(delete_query, (post_id,))
     connection.commit()
     cursor.close()
     return redirect(url_for('routes.dashboard.dashboar'))
