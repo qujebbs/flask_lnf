@@ -1,26 +1,43 @@
-from flask import Flask, render_template, request, redirect, url_for, request, session, Blueprint
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    request,
+    session,
+    Blueprint,
+)
 import bcrypt
 import os
 import secrets
 import smtplib
 from email.mime.text import MIMEText
-from utils import get_cursor, close_connection, get_connection, log_in_user, log_out_user
+from email.mime.multipart import MIMEMultipart
+from utils import (
+    get_cursor,
+    close_connection,
+    get_connection,
+    log_in_user,
+    log_out_user,
+)
 
-authentication = Blueprint('authentication', __name__)
+authentication = Blueprint("authentication", __name__)
+
 
 @authentication.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
         username = request.form.get("username", "")
         password = request.form.get("password", "").encode("utf-8")
-        query = "SELECT * FROM tbl_user WHERE col_username = %s "
+        query = "SELECT * FROM tbl_user WHERE colUsername = %s "
         cursor, connection = get_cursor()
         cursor.execute(query, (username,))
         user = cursor.fetchone()
 
         if user and bcrypt.checkpw(password, user[3].encode("utf-8")):
-            session.update({"user": user, "user_id": user[0], "user_role": user[5]})
-            log_in_user(user, user[0], user[5])
+            session.update({"user": user, "user_id": user[0], "user_role": user[4]})
+            log_in_user(user, user[0], user[4])
             return redirect(url_for("routes.dashboard.dashboar"))
 
         return render_with_alert(
@@ -29,111 +46,142 @@ def login():
 
     return render_template("login.html")
 
+
 @authentication.route("/register", methods=["POST", "GET"])
 def register():
     if request.method == "POST":
-        studnum = request.form["stud_id"]
         username = request.form["username"]
-        password = request.form["password"].encode("utf-8")
-        confirm_password = request.form["confirm_password"].encode("utf-8")
+        password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
         email = request.form["email"]
-        cursor = get_cursor
-        connection = get_connection
-        error_checks = [
-            (len(password) < 8, "Password should be at least 8 characters long."),
-            (password != confirm_password, "Passwords do not match."),
-        ]
 
-        for check, message in error_checks:
-            if check:
-                return render_with_alert(
-                    "register.html",
-                    text=message,
-                    text_status="error",
-                    studnum=studnum,
-                    username=username,
-                    email=email,
+        def check_password(password, confirm_password):
+            if len(password) < 8:
+                return False, "Password should be at least 8 characters long."
+            if password != confirm_password:
+                return False, "Passwords do not match."
+            if not (
+                any(char.islower() for char in password)
+                and any(char.isupper() for char in password)
+                and any(char.isdigit() for char in password)
+            ):
+                return (
+                    False,
+                    "Password should contain at least one Lowercase letter, one Uppercase letter and one digit.",
                 )
+            return True, ""
 
-        query = "SELECT col_username, col_studNum, col_email FROM tbl_user WHERE col_username = %s OR col_studNum = %s OR col_email = %s"
-        cursor.execute(query, (username, studnum, email))
-        existing_records = cursor.fetchall()
+        password_check, message = check_password(password, confirm_password)
+        if not password_check:
+            return render_with_alert("register.html", text=message, text_status="error")
 
-        errors = {
-            "username": "Username already exists.",
-            "studnum": "Student Id already exists.",
-            "email": "Email address already exists.",
-        }
+        with get_connection() as connection:
+            cursor = connection.cursor()
+            password = password.encode("utf-8")  # Re-encode the password as bytes
+            query = "SELECT colUsername, colEmail FROM tbl_user WHERE colUsername = %s OR colEmail = %s"
+            cursor.execute(query, (username, email))
+            existing_records = cursor.fetchall()
 
-        for record in existing_records:
-            for i, error_key in enumerate(errors.keys()):
-                if record[i] == locals()[error_key]:
-                    return render_with_alert(
-                        "register.html",
-                        text=errors[error_key],
-                        text_status="error",
-                    )
+            errors = {
+                "username": "Username already exists.",
+                "email": "Email address already exists.",
+            }
 
-        hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
-        query = "CALL createUser(%s,%s,%s,%s)"
-        cursor.execute(query, (studnum, hashed_password, email, username))
-        connection.commit()
+            for record in existing_records:
+                for error_key, error_message in errors.items():
+                    if record[0] == username and error_key == "username":
+                        return render_with_alert(
+                            "register.html", text=error_message, text_status="error"
+                        )
+                    if record[1] == email and error_key == "email":
+                        return render_with_alert(
+                            "register.html", text=error_message, text_status="error"
+                        )
 
-        return render_with_alert(
-            "register.html",
-            text="Account created successfully.",
-            text_status="success",
-        )
+            hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+            query = "CALL createUser(%s,%s,%s)"
+            cursor.execute(query, (hashed_password, email, username))
+            connection.commit()
+
+            return render_with_alert(
+                "register.html",
+                text="Account created successfully.",
+                text_status="success",
+            )
 
     return render_template("register.html")
+
 
 @authentication.route("/logout")
 def logout():
     log_out_user()
     return render_template("login.html")
 
-def send_password_reset_email(email, hashed_password, token):
-    sender_email = "johnmiller.asz8@gmail.com"  # Replace with your email address
-    password = "utkk gxyl whdq grgt"  # Replace with your email password
+
+def send_password_reset_email(email, username):
+    sender_email = "johnmiller.asz8@gmail.com"
+    password = "utkk gxyl whdq grgt"
 
     # Compose the email message
-    subject = "Password Reset"
-    # body = f"Click the link below to reset your password:\n\nhttp://example.com/reset_password?token={token}"
-    body = f"Your password is: {hashed_password}"
-    message = MIMEText(body)
+    subject = "Your Username"
+    body = """
+    <html>
+    <body style="font-family: Arial, sans-serif; text-align: center;">
+        <div style="border: 2px solid #006699; padding: 20px; margin: 10px;">
+            <h2 style="color: #006699;">LostNFound Account Recovery</h2>
+            <p>Dear User,</p>
+            <p>It appears that you've requested assistance in recovering your account username. No worries, we're here to help!</p>
+            <p>Your Username is: <b style="color: #ff0000;">{username}</b></p>
+            <p>If you did not initiate this request or have any concerns, please contact our support team at <a href='mailto:johnmiller.asz8@gmail.com' style="color: #006699;">support@lostNfound</a> for further assistance.</p>
+            <p>Best Regards,<br>Your Support Team</p>
+        </div>
+    </body>
+    </html>
+    """.format(
+        username=username
+    )
+    message = MIMEMultipart("alternative")
     message["Subject"] = subject
     message["From"] = sender_email
     message["To"] = email
+    part = MIMEText(body, "html")
+    message.attach(part)
 
-    # Send the email
     with smtplib.SMTP("smtp.gmail.com", 587) as server:
         server.starttls()
         server.login(sender_email, password)
         server.send_message(message)
 
-@authentication.route("/forgot_password", methods=["GET", "POST"])
-def forgot_password():
+
+@authentication.route("/forgot_username", methods=["GET", "POST"])
+def forgot_username():
     if request.method == "POST":
         email = request.form["email"]
-        cursor = get_cursor
-        connection = get_connection
-        # Check if the email exists in the database
-        query = "SELECT * FROM tbl_user WHERE col_email = %s"
-        cursor.execute(query, (email,))
-        user = cursor.fetchone()
+        cursor = get_cursor()
+        connection = get_connection()
+
+        with connection.cursor() as cursor:
+            query = "SELECT * FROM tbl_user WHERE colEmail = %s"
+            cursor.execute(query, (email,))
+            user = cursor.fetchone()
 
         if user:
-            token = secrets.token_hex(16)
-            send_password_reset_email(user[4], user[3], token)
-
+            send_password_reset_email(user[2], user[1])
         else:
-            print("Email not found")
-        return render_template(
-            "forgot-password.html", message="Password reset email sent."
+            return render_with_alert(
+                "forgot_username.html",
+                text="No email found.",
+                text_status="info",
+            )
+
+        return render_with_alert(
+            "login.html",
+            text="Username sent in your email.",
+            text_status="success",
         )
 
-    # Render the forgot password form
-    return render_template("forgot-password.html")
+    return render_template("forgot_username.html")
+
 
 def render_with_alert(template, **kwargs):
     return render_template(template, show_sweetalert=True, **kwargs)
