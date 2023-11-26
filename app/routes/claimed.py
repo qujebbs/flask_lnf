@@ -16,7 +16,7 @@ def claime():
 
     user, user_id, user_role = get_current_user_data()
     cursor, connection = get_cursor()
-    query = "SELECT u.colUsername, lp.colItemName, lp.colItemDesc, u.colEmail, lp.colDatePosted, pic.colPicURI FROM tbl_items AS lp JOIN tbl_user AS u ON lp.colPosterID = u.colUserID JOIN tbl_item_pic AS pic ON lp.colItemID = pic.colItemID and lp.colStatusID = 4;"
+    query = "SELECT u.colUsername, lp.colItemName, lp.colItemDesc, u.colEmail, lp.colDatePosted, pic.colPicURI, lp.colItemID FROM tbl_items AS lp JOIN tbl_user AS u ON lp.colPosterID = u.colUserID JOIN tbl_item_pic AS pic ON lp.colItemID = pic.colItemID and lp.colStatusID = 4;"
     cursor.execute(query)
     value = cursor.fetchall()
     img_paths = [row[5] for row in value]

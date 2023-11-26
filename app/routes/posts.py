@@ -20,9 +20,9 @@ def upload():
         return redirect(url_for("routes.authentication.login"))
     user, user_id, user_role = get_current_user_data()
     if user_role == 2:
-        user_rolee = "user"
-    elif user_role == 1:
         user_rolee = "admin"
+    elif user_role == 1:
+        user_rolee = "user"
     if request.method == "POST":
         item_name = request.form["item_name"]
         description = request.form["description"]
@@ -61,3 +61,12 @@ def upload():
     #     text="Incorrect Username or Password!",
     #     text_status="error",
     # )
+
+@posts.route('/delpost/<int:post_id>', methods=['POST'])
+def delpost(post_id):
+    cursor, connection = get_cursor()
+    delete_query = "DELETE FROM tbl_items WHERE colItemID = %s;"
+    cursor.execute(delete_query, (post_id,))
+    connection.commit()
+    cursor.close()
+    return redirect(url_for('routes.dashboard.dashboar'))

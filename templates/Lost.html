@@ -9,7 +9,7 @@
     <div
       class="grid gap-6 h-auto md:grid-cols-2 xl:grid-cols-4 hover:cursor-pointer"
     >
-      <a href="{{ url_for('routes.found.foun')}}">
+      <a href="{{ url_for('routes.lost.los')}}">
         <div
           class="flex items-center h-32 border p-4 bg-blue-100 rounded-lg shadow-xl dark:bg-gray-800"
         >
@@ -169,18 +169,20 @@
             >
           </h3>
         </div>
+        {%if user_role== 2 or user_id == items[i][6] %}
         <div>
           <ul class="wrapper">
             <li class="icon facebook">
               <span class="tooltip">Found</span>
               <span><i class="fab fa-facebook-f"></i></span>
-            </li>
+            </li><form action="delpost/{{ items[i][7]}}" method="post">
             <li class="icon instagram">
-              <span class="tooltip">Delete</span>
+              <span><button type="submit">Delete</button></span>
               <span><i class="fab fa-instagram"></i></span>
-            </li>
+            </li></form>
           </ul>
         </div>
+        {% endif %}
       </div>
       <h4 class="fbtitle">{{ items[i][1]}} </h4>
       <h4 class="fbmessage">{{ items[i][2]}} </h4>
