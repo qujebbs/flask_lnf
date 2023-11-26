@@ -31,7 +31,7 @@ def login():
         username = request.form.get("username", "")
         password = request.form.get("password", "").encode("utf-8")
         query = "SELECT * FROM tbl_user WHERE colUsername = %s "
-        cursor = get_cursor()
+        cursor, connection = get_cursor()
         cursor.execute(query, (username,))
         user = cursor.fetchone()
 

@@ -6,7 +6,7 @@ def get_connection():
     connection = mysql.connector.connect(
         host="localhost",
         port="3306",
-        database="lostandfound",
+        database="lostandfounddb",
         user="root",
         password="",
     )
@@ -43,3 +43,21 @@ def get_current_user_data():
     user_role = session.get("user_role")
 
     return user, user_id, user_role
+
+def getItemcount():
+    cursor, connection = get_cursor()
+
+    cursor.execute("SELECT COUNT(colItemID) AS postcount FROM tbl_items where colStatusID = 1;")
+    lostcount = cursor.fetchone()
+
+    cursor.execute("SELECT COUNT(colItemID) AS postcount FROM tbl_items where colStatusID = 2;")
+    foundcount = cursor.fetchone()
+
+    cursor.execute("SELECT COUNT(colItemID) AS postcount FROM tbl_items where colStatusID = 3;")
+    unclaimedcount = cursor.fetchone()
+
+
+    cursor.execute("SELECT COUNT(colItemID) AS postcount FROM tbl_items where colStatusID = 4;")
+    claimedcount = cursor.fetchone()
+
+    return lostcount, foundcount, unclaimedcount, claimedcount
