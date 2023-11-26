@@ -20,9 +20,9 @@ def upload():
         return redirect(url_for("routes.authentication.login"))
     user, user_id, user_role = get_current_user_data()
     if user_role == 2:
-        user_role = "user"
+        user_rolee = "user"
     elif user_role == 1:
-        user_role = "admin"
+        user_rolee = "admin"
     if request.method == "POST":
         item_name = request.form["item_name"]
         description = request.form["description"]
@@ -32,7 +32,7 @@ def upload():
         if item_name and description and pictures:
             query = "call createNewItem(%s,%s,%s,%s)"
             cursor.execute(
-                query, (item_name, description, user_id, user_role)
+                query, (item_name, description, user_id, user_rolee)
             )
             cursor.execute(
                 "SELECT last_insert_id() AS 'postID' FROM tbl_items  LIMIT 1;"
@@ -51,7 +51,7 @@ def upload():
 
             connection.commit()
             return render_with_alert(
-                "dashboard.html",
+                "dashboard.html", user_role=user_role,
                 text="Upload Successful.",
                 text_status="success",
             )

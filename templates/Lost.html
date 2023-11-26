@@ -158,7 +158,7 @@
         <div class="fbuser_details">
           <div class="fbprofile_img">
             <img
-              src="{{url_for('static', filename='assets/fbcard/User.jpg')}}"
+              src="{{paths[i]}}"
               alt="user"
               class="cover"
             />
@@ -182,8 +182,8 @@
           </ul>
         </div>
       </div>
-      <h4 class="fbtitle">Item Name</h4>
-      <h4 class="fbmessage">Item Description</h4>
+      <h4 class="fbtitle">{{ items[i][1]}} </h4>
+      <h4 class="fbmessage">{{ items[i][2]}} </h4>
       <div class="fbimgBg">
         <img src="{{paths[i]}}" alt="bg" class="coverFull" />
       </div>

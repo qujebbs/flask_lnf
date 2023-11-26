@@ -4,7 +4,7 @@ import os
 import secrets
 import smtplib
 from email.mime.text import MIMEText
-from utils import get_connection, get_cursor, close_connection, is_user_logged_in
+from utils import get_connection, get_cursor, close_connection, is_user_logged_in, get_current_user_data
 
 mypost = Blueprint('mypost', __name__)
 
@@ -12,5 +12,6 @@ mypost = Blueprint('mypost', __name__)
 def mypos():
         if not is_user_logged_in():
             return redirect(url_for("authentication.login"))
-    
-        return render_template("mypost.html")
+
+        user, user_id, user_role = get_current_user_data()
+        return render_template("mypost.html", user_role= user_role)

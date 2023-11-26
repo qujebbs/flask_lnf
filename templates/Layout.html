@@ -120,6 +120,7 @@
               </a>
             </li>
           </ul>
+        {%if user_role== 2 %}
           <ul class="">
             <li class="relative px-6 py-3 border-b">
               <a
@@ -146,7 +147,7 @@
               </a>
             </li>
           </ul>
-
+          {%elif user_role== 1 %}
           <ul class="">
             <li class="relative px-6 py-3 border-b">
               <a
@@ -172,6 +173,7 @@
               </a>
             </li>
           </ul>
+          {% endif %}
         </div>
       </aside>
       <!-- Mobile sidebar -->

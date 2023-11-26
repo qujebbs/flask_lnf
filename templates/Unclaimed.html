@@ -149,18 +149,23 @@
     </div>
   </div>
   <!--End of Dashboard-->
+  {% for i in range(items|length) %}
   <div class="centerfb">
     <div class="fbcard">
       <div class="fbtop">
         <div class="fbuser_details">
           <div class="fbprofile_img">
             <img
-              src="{{url_for('static', filename='assets/fbcard/User.jpg')}}"
+              src="{{paths[i]}}"
               alt="user"
               class="cover"
             />
           </div>
-          <h3>Username <br /><span class="hour">20 h</span></h3>
+          <h3>
+            {{ items[i][0]}} ({{ items[i][3]}})<br /><span class="hour"
+              >{{ items[i][4]}}</span
+            >
+          </h3>
         </div>
         <div>
           <ul class="wrapper">
@@ -175,11 +180,11 @@
           </ul>
         </div>
       </div>
-      <h4 class="fbtitle">Item Name</h4>
-      <h4 class="fbmessage">Item Description</h4>
+      <h4 class="fbtitle">{{ items[i][1]}} </h4>
+      <h4 class="fbmessage">{{ items[i][2]}} </h4>
       <div class="fbimgBg">
         <img
-          src="{{url_for('static', filename='assets/fbcard/Bg.jpg')}}"
+          src="{{paths[i]}}"
           alt="bg"
           class="coverFull"
         />
@@ -216,6 +221,7 @@
         </div>
       </div>
       <div class="fbborder_bott"></div>
+
       <!-- <div class="fbaddComments">
            <div class="fbuserimg">
                <img src="{{url_for('static', filename='assets/fbcard/User.jpg')}}" alt="user" class="cover">
@@ -224,5 +230,6 @@
        </div> -->
     </div>
   </div>
+  {% endfor %}
 </main>
 {% endblock %}
