@@ -4,7 +4,7 @@ import os
 import secrets
 import smtplib
 from email.mime.text import MIMEText
-from utils import get_connection, get_cursor, close_connection, is_user_logged_in, get_current_user_data
+from utils import get_connection, get_cursor, close_connection, is_user_logged_in, get_current_user_data, getItemcount
 from app.routes.authentication import render_with_alert
 
 posts = Blueprint('posts', __name__)
@@ -18,6 +18,9 @@ app.config["UPLOAD_FOLDER"] = PICS_FOLDER
 def upload():
     if not is_user_logged_in():
         return redirect(url_for("routes.authentication.login"))
+    
+    lostcount, foundcount, unclaimedcount, claimedcount = getItemcount()
+    itemcount = [lostcount, foundcount, unclaimedcount, claimedcount]
     user, user_id, user_role = get_current_user_data()
     if user_role == 2:
         user_rolee = "admin"
@@ -49,18 +52,8 @@ def upload():
 
                 pic.save(newfile_path)
 
-            connection.commit()
-            return render_with_alert(
-                "dashboard.html", user_role=user_role,
-                text="Upload Successful.",
-                text_status="success",
-            )
-        
-    # return render_with_alert(
-    #     "dashboard.html",
-    #     text="Incorrect Username or Password!",
-    #     text_status="error",
-    # )
+            connection.commit()    
+            return redirect(url_for('routes.dashboard.dashboar', user_role=user_role, itemcount=itemcount, text="Upload Successful.", text_status="success", show_sweetalert=True))
 
 @posts.route('/delpost/<int:post_id>', methods=['POST'])
 def delpost(post_id):
