@@ -3,13 +3,7 @@ from flask import session
 
 
 def get_connection():
-    connection = mysql.connector.connect(
-        host="localhost",
-        port="3306",
-        database="lostandfounddb",
-        user="root",
-        password="",
-    )
+
     return connection
 
 
