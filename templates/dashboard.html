@@ -98,90 +98,96 @@
 
         </div>
     </div>
-    {% for i in range(items|length) %}
-    <div class="centerfb">
-      <div class="fbcard">
-        <div class="fbtop">
-          <div class="fbuser_details">
-            <div class="fbprofile_img">
-              <img
-                src="{{paths[i]}}"
-                alt="user"
-                class="cover"
-              />
+{% if searched %}
+    {% if items %}
+        {% for i in range(items|length) %}
+        <div class="centerfb">
+        <div class="fbcard">
+            <div class="fbtop">
+            <div class="fbuser_details">
+                <div class="fbprofile_img">
+                <img
+                    src="{{paths[i]}}"
+                    alt="user"
+                    class="cover"
+                />
+                </div>
+                <h3>
+                {{ items[i][0]}} ({{ items[i][3]}})<br /><span class="hour"
+                    >{{ items[i][4]}}</span
+                >
+                </h3>
             </div>
-            <h3>
-              {{ items[i][0]}} ({{ items[i][3]}})<br /><span class="hour"
-                >{{ items[i][4]}}</span
-              >
-            </h3>
-          </div>
-          {%if user_role== 2 %}
-          <div>
-            <ul class="wrapper">
-              <li class="icon instagram"><form action="mark_as_unclaimed/{{ items[i][6]}}" method="post">
-                <span><button type="submit">Unclaimed</button></span>
-                <span><i class="fab fa-facebook-f"></i></span>
-              </li>
-            </form>
-              <form action="delpost/{{ items[i][6]}}" method="post">
-              <li class="icon instagram">
-                <span><button type="submit">Delete</button></span>
-                <span><i class="fab fa-instagram"></i></span>
-              </li></form>
-            </ul>
-          </div>
-          {% endif %}
-        </div>
-        <h4 class="fbtitle">{{ items[i][1]}} </h4>
-        <h4 class="fbmessage">{{ items[i][2]}} </h4>
-        <div class="fbimgBg">
-          <img
-            src="{{paths[i]}}"
-            alt="bg"
-            class="coverFull"
-          />
-        </div>
-        <div class="fbbtns">
-          <div class="fbleft">
+            {%if user_role== 2 %}
+            <div>
+                <ul class="wrapper">
+                <li class="icon instagram"><form action="mark_as_unclaimed/{{ items[i][6]}}" method="post">
+                    <span><button type="submit">Unclaimed</button></span>
+                    <span><i class="fab fa-facebook-f"></i></span>
+                </li>
+                </form>
+                <form action="delpost/{{ items[i][6]}}" method="post">
+                <li class="icon instagram">
+                    <span><button type="submit">Delete</button></span>
+                    <span><i class="fab fa-instagram"></i></span>
+                </li></form>
+                </ul>
+            </div>
+            {% endif %}
+            </div>
+            <h4 class="fbtitle">{{ items[i][1]}} </h4>
+            <h4 class="fbmessage">{{ items[i][2]}} </h4>
+            <div class="fbimgBg">
             <img
-              src="{{url_for('static', filename='assets/fbcard/like.png')}}"
-              alt="like"
+                src="{{paths[i]}}"
+                alt="bg"
+                class="coverFull"
             />
-            <h4 class="fblikes">499</h4>
-          </div>
-          <div class="fbright">
-            <h4>919 comments 500 shares</h4>
-          </div>
+            </div>
+            <div class="fbbtns">
+            <div class="fbleft">
+                <img
+                src="{{url_for('static', filename='assets/fbcard/like.png')}}"
+                alt="like"
+                />
+                <h4 class="fblikes">499</h4>
+            </div>
+            <div class="fbright">
+                <h4>919 comments 500 shares</h4>
+            </div>
+            </div>
+            <div class="fbborder"></div>
+            <div class="fbicon">
+            <div class="fblike">
+                <img
+                src="{{url_for('static', filename='assets/fbcard/gray_like.png')}}"
+                alt="like"
+                class="graylike"
+                onclick="likeButton()"
+                />
+                <img
+                src="{{url_for('static', filename='assets/fbcard/comments.png')}}"
+                alt="comments"
+                />
+                <img
+                src="{{url_for('static', filename='assets/fbcard/share.png')}}"
+                alt="share"
+                />
+            </div>
+            </div>
+            <div class="fbborder_bott"></div>
+            <!-- <div class="fbaddComments">
+                <div class="fbuserimg">
+                    <img src="{{url_for('static', filename='assets/fbcard/User.jpg')}}" alt="user" class="cover">
+                </div>
+                <input type="text" class="fbtext" placeholder="Write a comment...">
+            </div>-->
         </div>
-        <div class="fbborder"></div>
-        <div class="fbicon">
-          <div class="fblike">
-            <img
-              src="{{url_for('static', filename='assets/fbcard/gray_like.png')}}"
-              alt="like"
-              class="graylike"
-              onclick="likeButton()"
-            />
-            <img
-              src="{{url_for('static', filename='assets/fbcard/comments.png')}}"
-              alt="comments"
-            />
-            <img
-              src="{{url_for('static', filename='assets/fbcard/share.png')}}"
-              alt="share"
-            />
-          </div>
         </div>
-        <div class="fbborder_bott"></div>
-        <!-- <div class="fbaddComments">
-             <div class="fbuserimg">
-                 <img src="{{url_for('static', filename='assets/fbcard/User.jpg')}}" alt="user" class="cover">
-             </div>
-             <input type="text" class="fbtext" placeholder="Write a comment...">
-         </div> -->
-      </div>
-    </div>
-    {% endfor %}
+        {% endfor %}
+    {%else%}
+    <p>No results found.</p>
+    {% endif%}
+{% endif %}
 </main>
 {% endblock %}
