@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<main class="h-full overflow-y-auto">
+<main class="h-full overflow-y-auto">{% if not searched %}
     <div class="container px-6 mx-auto grid">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Welcome!!!
@@ -98,6 +98,7 @@
 
         </div>
     </div>
+{%endif%}
 {% if searched %}
     {% if items %}
         {% for i in range(items|length) %}
@@ -176,12 +177,6 @@
             </div>
             </div>
             <div class="fbborder_bott"></div>
-            <!-- <div class="fbaddComments">
-                <div class="fbuserimg">
-                    <img src="{{url_for('static', filename='assets/fbcard/User.jpg')}}" alt="user" class="cover">
-                </div>
-                <input type="text" class="fbtext" placeholder="Write a comment...">
-            </div>-->
         </div>
         </div>
         {% endfor %}
@@ -189,5 +184,14 @@
     <p>No results found.</p>
     {% endif%}
 {% endif %}
+
+<!-- {%if not searched %}
+    <div class="fbaddComments">
+        <div class="fbuserimg">
+            <img src="{{url_for('static', filename='assets/fbcard/User.jpg')}}" alt="user" class="cover">
+        </div>
+        <input type="text" class="fbtext" placeholder="Write a comment...">
+    </div>
+{%endif%} -->
 </main>
 {% endblock %}
