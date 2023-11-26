@@ -52,27 +52,6 @@
                 </div>
             </div>
          </a>
-         <a href="{{url_for('routes.claimed.claime')}}">   
-            <div class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
-                <div
-                    class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-
-                </div>
-                <div>
-                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                        Claimed
-                    </p>
-                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                        {{itemcount[3][0]}}
-                    </p>
-                </div>
-            </div>
-         </a>
          <a href="{{url_for('routes.unclaimed.unclaime')}}">   
             <div class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
                 <div
@@ -90,6 +69,27 @@
                     </p>
                     <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
                         {{itemcount[2][0]}}
+                    </p>
+                </div>
+            </div>
+         </a>
+         <a href="{{url_for('routes.claimed.claime')}}">   
+            <div class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
+                <div
+                    class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+
+                </div>
+                <div>
+                    <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                        Claimed
+                    </p>
+                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                        {{itemcount[3][0]}}
                     </p>
                 </div>
             </div>
@@ -122,11 +122,24 @@
             {%if user_role== 2 %}
             <div>
                 <ul class="wrapper">
+                {%if items[i][7] == 1 %}
+                <li class="icon facebook">
+                    <form action="mark_as_found/{{ items[i][7]}}" method="post">
+                        <span><button type="submit">Found</button></span>
+                        <span><i class="fab fa-facebook-f"></i></span>
+                </li></form>
+                {%elif items[i][7] == 2 or items[i][7] == 3 %}
+                <li class="icon facebook"><form action="mark_as_claimed/{{ items[i][6]}}" method="post">
+                    <span><button type="submit">Claimed</button></span>
+                    <span><i class="fab fa-facebook-f"></i></span>
+                    </li></form>
+                {%elif items[i][7] == 4 %}
                 <li class="icon instagram"><form action="mark_as_unclaimed/{{ items[i][6]}}" method="post">
                     <span><button type="submit">Unclaimed</button></span>
                     <span><i class="fab fa-facebook-f"></i></span>
                 </li>
                 </form>
+                {% endif %}
                 <form action="delpost/{{ items[i][6]}}" method="post">
                 <li class="icon instagram">
                     <span><button type="submit">Delete</button></span>
@@ -181,7 +194,7 @@
         </div>
         {% endfor %}
     {%else%}
-    <p>No results found.</p>
+    <p class="centerfb">No results found.</p>
     {% endif%}
 {% endif %}
 
