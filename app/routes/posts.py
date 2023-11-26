@@ -19,9 +19,9 @@ def upload():
     if not is_user_logged_in():
         return redirect(url_for("routes.authentication.login"))
     user, user_id, user_role = get_current_user_data()
-    if user_role == 2:
+    if user_role == 1:
         user_role = "user"
-    elif user_role == 1:
+    elif user_role == 2:
         user_role = "admin"
     if request.method == "POST":
         item_name = request.form["item_name"]
