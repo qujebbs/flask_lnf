@@ -12,6 +12,9 @@ users = Blueprint('users', __name__)
 def user():
         if not is_user_logged_in():
             return redirect(url_for("authentication.login"))
-
+        
         user, user_id, user_role = get_current_user_data()  
-        return render_template("users.html", user_role= user_role)
+        cursor, connection = get_cursor()
+        cursor.execute("call getAllUsers();")
+        value=cursor.fetchall()
+        return render_template("users.html", user_role= user_role, users=value)

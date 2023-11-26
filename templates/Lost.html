@@ -173,9 +173,12 @@
         <div>
           <ul class="wrapper">
             <li class="icon facebook">
-              <span class="tooltip">Found</span>
+            <form action="mark_as_found/{{ items[i][7]}}" method="post">
+              <span><button type="submit">Found</button></span>
               <span><i class="fab fa-facebook-f"></i></span>
-            </li><form action="delpost/{{ items[i][7]}}" method="post">
+            </li>
+          </form>
+            <form action="delpost/{{ items[i][7]}}" method="post">
             <li class="icon instagram">
               <span><button type="submit">Delete</button></span>
               <span><i class="fab fa-instagram"></i></span>

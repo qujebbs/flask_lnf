@@ -170,10 +170,12 @@
         {%if user_role== 2 %}
         <div>
           <ul class="wrapper">
-            <li class="icon instagram">
-              <span class="tooltip">Unclaimed</span>
+            <li class="icon instagram"><form action="mark_as_unclaimed/{{ items[i][6]}}" method="post">
+              <span><button type="submit">Unclaimed</button></span>
               <span><i class="fab fa-facebook-f"></i></span>
-            </li><form action="delpost/{{ items[i][6]}}" method="post">
+            </li>
+          </form>
+            <form action="delpost/{{ items[i][6]}}" method="post">
             <li class="icon instagram">
               <span><button type="submit">Delete</button></span>
               <span><i class="fab fa-instagram"></i></span>

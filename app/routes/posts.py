@@ -70,3 +70,30 @@ def delpost(post_id):
     connection.commit()
     cursor.close()
     return redirect(url_for('routes.dashboard.dashboar'))
+
+@posts.route('/mark_as_found/<int:post_id>', methods=['POST', 'GET'])
+def mark_as_found(post_id):
+    cursor, connection = get_cursor()
+    update_query = "update tbl_items set colStatusID = 2 where colItemID = %s"
+    cursor.execute(update_query, (post_id,))
+    connection.commit()
+    cursor.close()
+    return redirect(url_for('routes.dashboard.dashboar'))
+
+@posts.route('/mark_as_claimed/<int:post_id>', methods=['POST', 'GET'])
+def mark_as_claimed(post_id):
+    cursor, connection = get_cursor()
+    update_query = "update tbl_items set colStatusID = 4 where colItemID = %s"
+    cursor.execute(update_query, (post_id,))
+    connection.commit()
+    cursor.close()
+    return redirect(url_for('routes.dashboard.dashboar'))
+
+@posts.route('/mark_as_unclaimed/<int:post_id>', methods=['POST', 'GET'])
+def mark_as_unclaimed(post_id):
+    cursor, connection = get_cursor()
+    update_query = "update tbl_items set colStatusID = 3 where colItemID = %s"
+    cursor.execute(update_query, (post_id,))
+    connection.commit()
+    cursor.close()
+    return redirect(url_for('routes.dashboard.dashboar'))
