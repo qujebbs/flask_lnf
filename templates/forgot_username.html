@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Forgot password</title>
+    <title>Forgot Username</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css')}}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
@@ -48,11 +48,11 @@
               <h1
                 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200"
               >
-                Forgot password
+                Forgot Username
               </h1>
               <label class="block text-sm">
-                <span class="text-gray-700 dark:text-gray-400">Email</span>
-                <form action="{{url_for('forgot_password')}}" method="post">
+                <span class="text-gray-700 dark:text-gray-400">Enter your email:</span>
+                <form action="/forgot_username" method="post">
                 <input
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                   placeholder="Jane Doe"
@@ -61,7 +61,6 @@
                   required
                 />
               </label>
-
               <!-- You should use a button here, as the anchor is only used for the example  -->
               <input
               type="submit"

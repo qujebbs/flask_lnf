@@ -1,12 +1,29 @@
-from flask import Flask, render_template, request, redirect, url_for, request, session, Blueprint
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    request,
+    session,
+    Blueprint,
+)
 import bcrypt
 import os
 import secrets
 import smtplib
 from email.mime.text import MIMEText
-from utils import get_cursor, close_connection, get_connection, log_in_user, log_out_user
+from email.mime.multipart import MIMEMultipart
+from utils import (
+    get_cursor,
+    close_connection,
+    get_connection,
+    log_in_user,
+    log_out_user,
+)
 
-authentication = Blueprint('authentication', __name__)
+authentication = Blueprint("authentication", __name__)
+
 
 @authentication.route("/login", methods=["POST", "GET"])
 def login():
@@ -14,7 +31,7 @@ def login():
         username = request.form.get("username", "")
         password = request.form.get("password", "").encode("utf-8")
         query = "SELECT * FROM tbl_user WHERE colUsername = %s "
-        cursor, connection = get_cursor()
+        cursor = get_cursor()
         cursor.execute(query, (username,))
         user = cursor.fetchone()
 
@@ -29,29 +46,26 @@ def login():
 
     return render_template("login.html")
 
+
 @authentication.route("/register", methods=["POST", "GET"])
 def register():
     if request.method == "POST":
-        studnum = request.form["stud_id"]
         username = request.form["username"]
         password = request.form["password"].encode("utf-8")
         confirm_password = request.form["confirm_password"].encode("utf-8")
         email = request.form["email"]
-        cursor, connection = get_cursor()
-        error_checks = [
-            (len(password) < 8, "Password should be at least 8 characters long."),
-            (password != confirm_password, "Passwords do not match."),
-        ]
+        with get_connection() as connection:
+            cursor = connection.cursor()
+            error_checks = [
+                (len(password) < 8, "Password should be at least 8 characters long."),
+                (password != confirm_password, "Passwords do not match."),
+            ]
 
         for check, message in error_checks:
             if check:
                 return render_with_alert(
                     "register.html",
                     text=message,
-                    text_status="error",
-                    studnum=studnum,
-                    username=username,
-                    email=email,
                 )
 
         query = "SELECT colUsername, colEmail FROM tbl_user WHERE colUsername = %s OR colEmail = %s"
@@ -86,53 +100,72 @@ def register():
 
     return render_template("register.html")
 
+
 @authentication.route("/logout")
 def logout():
     log_out_user()
     return render_template("login.html")
 
-def send_password_reset_email(email, hashed_password, token):
-    sender_email = "johnmiller.asz8@gmail.com"  # Replace with your email address
-    password = "utkk gxyl whdq grgt"  # Replace with your email password
+
+def send_password_reset_email(email, username):
+    sender_email = "johnmiller.asz8@gmail.com"
+    password = "utkk gxyl whdq grgt"
 
     # Compose the email message
-    subject = "Password Reset"
-    # body = f"Click the link below to reset your password:\n\nhttp://example.com/reset_password?token={token}"
-    body = f"Your password is: {hashed_password}"
-    message = MIMEText(body)
+    subject = "Your Username"
+    body = """
+    <html>
+    <body style="font-family: Arial, sans-serif; text-align: center;">
+        <div style="border: 2px solid #006699; padding: 20px; margin: 10px;">
+            <h2 style="color: #006699;">LostNFound Account Recovery</h2>
+            <p>Dear User,</p>
+            <p>It appears that you've requested assistance in recovering your account username. No worries, we're here to help!</p>
+            <p>Your Username is: <b style="color: #ff0000;">{username}</b></p>
+            <p>If you did not initiate this request or have any concerns, please contact our support team at <a href='mailto:johnmiller.asz8@gmail.com' style="color: #006699;">support@lostNfound</a> for further assistance.</p>
+            <p>Best Regards,<br>Your Support Team</p>
+        </div>
+    </body>
+    </html>
+    """.format(
+        username=username
+    )
+    message = MIMEMultipart("alternative")
     message["Subject"] = subject
     message["From"] = sender_email
     message["To"] = email
+    part = MIMEText(body, "html")
+    message.attach(part)
 
-    # Send the email
     with smtplib.SMTP("smtp.gmail.com", 587) as server:
         server.starttls()
         server.login(sender_email, password)
         server.send_message(message)
 
-@authentication.route("/forgot_password", methods=["GET", "POST"])
-def forgot_password():
+
+@authentication.route("/forgot_username", methods=["GET", "POST"])
+def forgot_username():
     if request.method == "POST":
         email = request.form["email"]
-        cursor = get_cursor
-        connection = get_connection
-        # Check if the email exists in the database
-        query = "SELECT * FROM tbl_user WHERE col_email = %s"
-        cursor.execute(query, (email,))
-        user = cursor.fetchone()
+        cursor = get_cursor()
+        connection = get_connection()
+
+        with connection.cursor() as cursor:
+            query = "SELECT * FROM tbl_user WHERE colEmail = %s"
+            cursor.execute(query, (email,))
+            user = cursor.fetchone()
 
         if user:
             token = secrets.token_hex(16)
-            send_password_reset_email(user[4], user[3], token)
-
+            send_password_reset_email(user[2], user[1])
         else:
-            print("Email not found")
+            print("Username not found")
+
         return render_template(
-            "forgot-password.html", message="Password reset email sent."
+            "forgot_username.html", message="Password reset email sent."
         )
 
-    # Render the forgot password form
-    return render_template("forgot-password.html")
+    return render_template("forgot_username.html")
+
 
 def render_with_alert(template, **kwargs):
     return render_template(template, show_sweetalert=True, **kwargs)
