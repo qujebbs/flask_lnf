@@ -1,0 +1,245 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Roboto;
+} */
+
+/* body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #fff;
+} */
+
+.fbcard {
+  position: relative;
+  width: 600px;
+  min-height: 450px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15), -5px -5px 5px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+}
+
+.fbcard .fbtop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fbcard .fbtop .fbuser_details {
+  display: flex;
+  align-items: center;
+}
+
+.fbcard .fbtop .fbuser_details .fbprofile_img {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 8px;
+}
+
+.fbcover {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  cursor: pointer;
+}
+
+/* .fbcard .top .user_details time {
+    font-size: 18px;
+    color: black;
+    font-weight: 900;
+    line-height: 1em;
+    cursor: pointer;
+} */
+
+/* .fbhour {
+    color: gray;
+    font-size: 15px;
+    font-weight: 500;
+} */
+
+/* .fbglobDot {
+    position: absolute;
+    margin-left: 5px;
+    margin-top: -4px;
+    font-size: 20px;
+    align-items: center;
+    color: #0000004b;
+} */
+
+/* ul {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+ul li {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    margin-top: 10px;
+    margin-right: 48px;
+    list-style: none;
+    text-align: center;
+}
+
+ul li img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    margin-top: -1.5px;
+} */
+
+.fbmessage {
+  font-weight: 400;
+  margin-top: 5px;
+  color: #777;
+  line-height: 1.5em;
+}
+
+.fbtitle {
+  font-weight: 400;
+  margin-top: 5px;
+  color: black;
+  line-height: 1.5em;
+}
+
+zz .fbcoverFull {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  cursor: pointer;
+}
+.fbbtns {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.fbbtns img {
+  max-width: 30px;
+  cursor: pointer;
+}
+.fbbtns .left img {
+  margin-right: 8px;
+}
+.fblikes {
+  margin-top: -28px;
+  margin-left: 33px;
+  font-size: 17px;
+  color: #777;
+  text-align: center;
+  font-weight: 500;
+}
+.fbright h4 {
+  margin-top: 5px;
+  margin-left: 33px;
+  font-size: 17px;
+  color: #777;
+  text-align: center;
+  font-weight: 500;
+}
+.fbborder {
+  position: relative;
+  width: 100%;
+  height: 0.5px;
+  background: #0000004b;
+  margin-top: 15px;
+}
+.fbicon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0 5px 0;
+}
+.fbicon img {
+  max-width: 30px;
+  cursor: pointer;
+}
+.fblike {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+.fblike img {
+  position: relative;
+  max-width: 70px;
+  cursor: pointer;
+  margin: 0 40px;
+  margin-top: -15px;
+}
+.fblike img:nth-child(1) {
+  width: 55px;
+  margin-right: 20px;
+}
+.fblike img:nth-child(2) {
+  width: 33px;
+  margin-right: 15px;
+}
+.fbborder_bott {
+  position: relative;
+  width: 100%;
+  height: 0.5px;
+  background: #0000004b;
+  margin-top: -15px;
+}
+.fbaddComments {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+.fbaddComments .fbuserimg {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 8px;
+}
+.fbtext {
+  background: #f0f2f5;
+  width: 100%;
+  height: 40px;
+  border: none;
+  outline: none;
+  font-weight: 400;
+  font-size: 16px;
+  color: #262626;
+  border-radius: 20px;
+}
+
+input[type="text"] {
+  position: relative;
+  padding: 0 20px;
+}
+
+@media (max-width: 640px) {
+  .fbcard {
+    width: 350px;
+  }
+  .fbimgBg {
+    width: 350px;
+  }
+}

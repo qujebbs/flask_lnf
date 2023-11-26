@@ -1,0 +1,228 @@
+{% extends "layout.html" %} {% block content %}
+<main class="h-full overflow-y-auto">
+  <div class="container px-6 mx-auto grid">
+    <h2
+      class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+    ></h2>
+    <!-- CTA -->
+    <!-- Cards -->
+    <div
+      class="grid gap-6 h-auto md:grid-cols-2 xl:grid-cols-4 hover:cursor-pointer"
+    >
+      <a href="{{ url_for('routes.lost.los')}}">
+        <div
+          class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800"
+        >
+          <div
+            class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <div>
+            <p
+              class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400"
+            >
+              Lost
+            </p>
+            <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+              376
+            </p>
+          </div>
+        </div>
+      </a>
+      <!-- Card -->
+      <a href="{{ url_for('routes.found.foun')}}">
+        <div
+          class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800"
+        >
+          <div
+            class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <div>
+            <p
+              class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400"
+            >
+              Found
+            </p>
+            <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+              100
+            </p>
+          </div>
+        </div>
+        <a href="{{url_for('routes.unclaimed.unclaime')}}">
+          <div
+            class="flex items-center h-32 border p-4 bg-white rounded-lg shadow-xl dark:bg-gray-800"
+          >
+            <div
+              class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <div>
+              <p
+                class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400"
+              >
+                Unclaimed
+              </p>
+              <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                376
+              </p>
+            </div>
+          </div>
+        </a>
+      </a>
+      <a href="{{url_for('routes.unclaimed.unclaime')}}">
+        <div
+          class="flex items-center h-32 border p-4 bg-blue-100 rounded-lg shadow-xl dark:bg-gray-800"
+        >
+          <div
+            class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
+              />
+            </svg>
+          </div>
+          <div>
+            <p
+              class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400"
+            >
+              Claimed
+            </p>
+            <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+              376
+            </p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <!--End of Dashboard-->
+  <div class="centerfb">
+    <div class="fbcard">
+      <div class="fbtop">
+        <div class="fbuser_details">
+          <div class="fbprofile_img">
+            <img
+              src="{{url_for('static', filename='assets/fbcard/User.jpg')}}"
+              alt="user"
+              class="cover"
+            />
+          </div>
+          <h3>Username <br /><span class="hour">20 h</span></h3>
+        </div>
+        <div>
+          <ul class="wrapper">
+            <li class="icon instagram">
+              <span class="tooltip">Unclaimed</span>
+              <span><i class="fab fa-facebook-f"></i></span>
+            </li>
+            <li class="icon instagram">
+              <span class="tooltip">Delete</span>
+              <span><i class="fab fa-instagram"></i></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <h4 class="fbtitle">Item Name</h4>
+      <h4 class="fbmessage">Item Description</h4>
+      <div class="fbimgBg">
+        <img
+          src="{{url_for('static', filename='assets/fbcard/Bg.jpg')}}"
+          alt="bg"
+          class="coverFull"
+        />
+      </div>
+      <div class="fbbtns">
+        <div class="fbleft">
+          <img
+            src="{{url_for('static', filename='assets/fbcard/like.png')}}"
+            alt="like"
+          />
+          <h4 class="fblikes">499</h4>
+        </div>
+        <div class="fbright">
+          <h4>919 comments 500 shares</h4>
+        </div>
+      </div>
+      <div class="fbborder"></div>
+      <div class="fbicon">
+        <div class="fblike">
+          <img
+            src="{{url_for('static', filename='assets/fbcard/gray_like.png')}}"
+            alt="like"
+            class="graylike"
+            onclick="likeButton()"
+          />
+          <img
+            src="{{url_for('static', filename='assets/fbcard/comments.png')}}"
+            alt="comments"
+          />
+          <img
+            src="{{url_for('static', filename='assets/fbcard/share.png')}}"
+            alt="share"
+          />
+        </div>
+      </div>
+      <div class="fbborder_bott"></div>
+      <!-- <div class="fbaddComments">
+           <div class="fbuserimg">
+               <img src="{{url_for('static', filename='assets/fbcard/User.jpg')}}" alt="user" class="cover">
+           </div>
+           <input type="text" class="fbtext" placeholder="Write a comment...">
+       </div> -->
+    </div>
+  </div>
+</main>
+{% endblock %}

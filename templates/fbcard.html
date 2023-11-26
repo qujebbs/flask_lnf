@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Post Card Clone</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/fbcard/facebook.css' )}}">
+</head>
+
+<body>
+    <div class="fbcard">
+        <div class="fbtop">
+            <div class="fbuser_details">
+                <div class="fbprofile_img">
+                    <img src="{{url_for('static', filename='assets/fbcard/User.jpg')}}" alt="user" class="cover">
+                </div>
+                <h3>Username<br><span class="hour">20 h</span>
+            </div>
+            <div class="fbdot">
+                <img src="{{url_for('static', filename='assets/fbcard/dot.png')}}" alt="dot">
+            </div>
+        </div>
+        <h4 class="fbtitle">Item Name</h4>
+        <h4 class="fbmessage">Item Description</h4>
+        <div class="fbimgBg">
+            <img src="{{url_for('static', filename='assets/fbcard/Bg.jpg')}}" alt="bg" class="coverFull">
+        </div>
+        <div class="fbbtns">
+            <div class="fbleft">
+                <img src="{{url_for('static', filename='assets/fbcard/like.png')}}" alt="like">
+                <h4 class="fblikes">499</h4>
+            </div>
+            <div class="fbright">
+                <h4>919 comments 500 shares</h4>
+            </div>
+        </div>
+        <div class="fbborder"></div>
+        <div class="fbicon">
+            <div class="fblike">
+                <img src="{{url_for('static', filename='assets/fbcard/gray_like.png')}}" alt="like" class="graylike" onclick="likeButton()">
+                <img src="{{url_for('static', filename='assets/fbcard/comments.png')}}" alt="comments">
+                <img src="{{url_for('static', filename='assets/fbcard/share.png')}}" alt="share">
+            </div>
+        </div>
+        <div class="fbborder_bott"></div>
+        <!-- <div class="fbaddComments">
+            <div class="fbuserimg">
+                <img src="{{url_for('static', filename='assets/fbcard/User.jpg')}}" alt="user" class="cover">
+            </div>
+            <input type="text" class="text" placeholder="Write a comment...">
+        </div> -->
+    </div>
+    <!-- <script>
+        function likeButton(){
+            let graylike = document.querySelector('.graylike');
+            let likes = document.querySelector('.likes');
+            if (graylike.src.match("gray_like.png")) {
+                graylike.src = "blue_like.png";
+                likes.innerHTML = "500"
+            }else{
+                graylike.src = "gray_like.png";
+                likes.innerHTML = "499";
+            }
+            
+        }
+    </script> -->
+</body>
+
+</html>
