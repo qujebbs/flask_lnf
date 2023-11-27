@@ -101,3 +101,64 @@ document.getElementById("uploadForm").addEventListener("submit", function(event)
     event.target.submit();
   });
 });
+
+// Comment popup
+
+// document.getElementById('openComment').addEventListener('click', function() {
+//   document.getElementById('popComment').classList.remove('hidden');
+// });
+
+// document.getElementById('closeComment').addEventListener('click', function(e) {
+//   document.getElementById('popComment').classList.add('hidden');
+//   e.preventDefault();
+// });
+// document.getElementById('viewComs').addEventListener('click', function() {
+//   document.getElementById('popViewComs').classList.remove('hidden');
+// });
+
+// document.getElementById('closeViewComment').addEventListener('click', function(e) {
+//   document.getElementById('popViewComs').classList.add('hidden');
+//   e.preventDefault();
+// });
+
+function popComs(){
+  document.getElementById('popViewComs').classList.remove('hidden');
+  console.log('error')
+}
+function closeView(){
+  document.getElementById('popViewComs').classList.add('hidden');
+}
+
+
+
+
+
+//close
+
+
+
+
+// Comment popup
+// document.querySelectorAll('.commentButton').forEach(function(button) {
+//   button.addEventListener('click', function() {
+//     // Find the corresponding form based on the button's index
+//     var index = Array.from(document.querySelectorAll('.commentButton')).indexOf(button);
+//     var forms = document.querySelectorAll('.commentForm');
+    
+//     if (index < forms.length) {
+//       forms[index].classList.remove('hidden');
+//     }
+//   });
+// });
+
+// document.querySelectorAll('.closeCommentButton').forEach(function(button) {
+//   button.addEventListener('click', function(e) {
+//     // Find the corresponding form
+//     var form = button.closest('.commentForm');
+    
+//     if (form) {
+//       form.classList.add('hidden');
+//       e.preventDefault();
+//     }
+//   });
+// });

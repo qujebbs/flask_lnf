@@ -100,7 +100,7 @@ def register():
 
             hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
             query = "CALL createUser(%s,%s,%s)"
-            cursor.execute(query, (hashed_password, email, username))
+            cursor.execute(query, (email, hashed_password, username))
             connection.commit()
 
             return render_with_alert(

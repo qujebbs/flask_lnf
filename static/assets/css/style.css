@@ -127,7 +127,9 @@ textarea {
   align-items: center;
   justify-content: space-evenly;
   flex-direction: column;
+  max-height: max-content;
   margin-top: 20px;
+  z-index: 1;
 }
 .Btn {
   position: relative;
@@ -174,4 +176,13 @@ textarea {
   transform: translate(3px , 3px);
   transition-duration: .3s;
   box-shadow: 2px 2px 0px rgb(140, 32, 212);
+}
+.fbborder_bott{
+  word-wrap: break-word;
+  word-break: normal;
+}
+.coms{
+  word-wrap: break-word;
+  white-space: normal;
+  word-wrap: break-word;
 }

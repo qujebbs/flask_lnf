@@ -210,30 +210,103 @@
       <div class="fbborder"></div>
       <div class="fbicon">
         <div class="fblike">
-          <img
+          <!-- <img
             src="{{url_for('static', filename='assets/fbcard/gray_like.png')}}"
             alt="like"
             class="graylike"
             onclick="likeButton()"
-          />
-          <img
-            src="{{url_for('static', filename='assets/fbcard/comments.png')}}"
-            alt="comments"
-          />
-          <img
+          /> -->
+
+
+          <ul class="flex items-center flex-shrink-0 space-x-6">
+            <!-- Theme toggler -->
+          
+            <!--Upload menu-->
+                <!--Upload menu-->
+                <li class="relative inline-block mx-auto px-10">
+                  <button id="viewComs"
+                          class=" relative align-middle flex px-2 py-1 rounded-md focus:outline-none focus:shadow-outline-purple border hover:text-purple-600 px-6" 
+                          aria-label="Notifications">
+    
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.068.157 2.148.279 3.238.364.466.037.893.281 1.153.671L12 21l2.652-3.978c.26-.39.687-.634 1.153-.67 1.09-.086 2.17-.208 3.238-.365 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                          </svg>
+                          
+                          <p class=" text-xs mt-1 hover:text-white uppercase font-semibol px-5">View Comments</p>
+                  </button>
+                </li>
+                <li class="relative inline-block mx-auto px-10">
+                  <button id="openComment" type="button"
+                          class=" relative align-middle flex px-2 py-1 rounded-md focus:outline-none focus:shadow-outline-purple border hover:text-purple-600 px-6" 
+                          aria-label="Notifications">
+    
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.068.157 2.148.279 3.238.364.466.037.893.281 1.153.671L12 21l2.652-3.978c.26-.39.687-.634 1.153-.67 1.09-.086 2.17-.208 3.238-.365 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                          </svg>
+                          
+                          <p class=" text-xs mt-1 hover:text-white uppercase font-semibol px-5">Make Comment</p>
+                  </button>
+                </li>
+              
+    
+          <div id="popComment" class="hidden fixed inset-0 z-50 flex items-center align-middle justify-center">
+              <div class="w-full">
+                          <form class="max-w-2xl bg-white rounded-lg border bg-green-100 w-full p-2 mx-auto mt-20 ">
+                              <div class="Xicon relative h-30 w-30">
+                                  <div>
+                                      <button id="closeComment">
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 absolute top-0 right-0 ">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                      </button>
+                                      
+                                  </div>
+                                  
+                              </div>
+                              <div class="">
+                                  <h1 class="text-xl text-center font-bold">Comment</h1>
+                              </div>
+                              
+                              
+                              <div class="px-3 mb-2 mt-2">
+                                      <textarea placeholder="comment" name="user_comment" id="" class="w-full bg-gray-100 rounded border border-gray-400 leading-normal resize-none h-32 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" maxlength="255"></textarea>
+                              </div>
+                              <div class="flex justify-end px-4">
+                                      <!-- <input type="submit" class="px-3 py-2 rounded-md text-white bg-purple-600 text-sm bg-indigo-500" value="Comment"> -->
+                                      <button type="submit" class="px-3 py-2 rounded-md text-white bg-purple-600 text-sm bg-indigo-500">
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                                          </svg>
+                                          
+                                      </button>
+                              </div>
+                          </form>
+                </div>
+          </div>
+          
+    
+    
+          </ul>
+          
+         
+          
+          <!-- <img
             src="{{url_for('static', filename='assets/fbcard/share.png')}}"
             alt="share"
-          />
+          /> -->
+          
         </div>
+        
       </div>
-      <div class="fbborder_bott"></div>
-      <!-- <div class="fbaddComments">
-           <div class="fbuserimg">
-               <img src="{{url_for('static', filename='assets/fbcard/User.jpg')}}" alt="user" class="cover">
-           </div>
-           <input type="text" class="fbtext" placeholder="Write a comment...">
-       </div> -->
+
+      <div>
+        <small>comments...</small>
+        <h1 class="text-teal-500" >Ivan Reyes</h1>
+        <p class="text-xs">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod provident mollitia rerum eos aspernatur dolor?</p>
+      </div>
+      
     </div>
+    
   </div>
   {% endfor %}
 </main>

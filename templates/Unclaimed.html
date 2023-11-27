@@ -216,7 +216,7 @@
             class="graylike"
             onclick="likeButton()"
           />
-          <img
+          <img onclick="popComs()"
             src="{{url_for('static', filename='assets/fbcard/comments.png')}}"
             alt="comments"
           />
@@ -236,6 +236,26 @@
        </div> -->
     </div>
   </div>
+
+  
+          <!--Hidden Upload Form-->
+          <div id="popViewComs" class="hidden fixed inset-0 z-50 flex items-center align-middle justify-center">
+            <div class="w-full">
+                <form class="max-w-2xl bg-white rounded-lg border bg-green-100 w-full p-2 mx-auto mt-20 ">
+                    <div class="Xicon relative h-30 w-30">
+                        <div>
+                            <button onclick="closeView()" type="button">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 absolute top-0 right-0 ">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                            </button>
+                            
+                        </div>
+                        
+                    </div>
+                </form>
+              </div>
+          </div>
   {% endfor %}
 </main>
 {% endblock %}
