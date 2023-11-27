@@ -5,7 +5,7 @@
       <!-- News Feed -->
       {% for i in range(items|length) %}
   <div class="centerfb">
-    <div class="fbcard">
+    <div class="fbcard border dark:bg-gray-800">
       <div class="fbtop">
         <div class="fbuser_details">
           <div class="fbprofile_img">
@@ -15,7 +15,7 @@
               class="cover"
             />
           </div>
-          <h3>
+          <h3 class="text-gray-700 dark:text-gray-200">
             {{ items[i][0]}} ({{ items[i][3]}})<br /><span class="hour"
               >{{ items[i][4]}}</span
             >
@@ -39,8 +39,8 @@
         </div>
         {% endif %}
       </div>
-      <h4 class="fbtitle">{{ items[i][1]}} </h4>
-      <h4 class="fbmessage">{{ items[i][2]}} </h4>
+      <h4 class="fbtitle text-gray-700 dark:text-gray-200">{{ items[i][1]}} </h4>
+      <h4 class="fbmessage text-gray-600 dark:text-gray-400">{{ items[i][2]}} </h4>
       <div class="fbimgBg centerfb">
         <img src="{{paths[i]}}" alt="bg" class="coverFull" />
       </div>
