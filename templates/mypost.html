@@ -66,10 +66,7 @@
             class="graylike"
             onclick="likeButton()"
           />
-          <img
-            src="{{url_for('static', filename='assets/fbcard/comments.png')}}"
-            alt="comments"
-          />
+          <button class="showPopup" onclick="toggleModal(0)"><img src="{{url_for('static', filename='assets/fbcard/comments.png')}}"alt="comments"/></button>
           <img
             src="{{url_for('static', filename='assets/fbcard/share.png')}}"
             alt="share"
@@ -77,6 +74,15 @@
         </div>
       </div>
       <div class="fbborder_bott"></div>
+      <div class="overlay" id="overlay_0" ></div>
+      <div class="modal" id="modal_0">
+        <form action="/make_comment/{{ items[i][7]}}/mypost.mypos" method="POST">
+          <h2>Enter Data:</h2>
+          <input type="text" name="user_comment" placeholder="Enter your comment..." required>
+          <button type="submit">Save</button>
+          <button type="button" onclick="closeModal(0)">Cancel</button>
+        </form>
+      </div>
       <!-- <div class="fbaddComments">
             <div class="fbuserimg">
                 <img src="{{url_for('static', filename='assets/fbcard/User.jpg')}}" alt="user" class="cover">

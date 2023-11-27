@@ -588,5 +588,30 @@
         {% block content %} {% endblock %}
       </div>
     </div>
+    <script>
+      function toggleModal(index) {
+          const modal = document.getElementById(`modal_${index}`);
+          const overlay = document.getElementById(`overlay_${index}`);
+          
+          if (modal && overlay) {
+              overlay.style.display = 'block';
+              modal.style.display = 'block';
+          } else {
+              console.error('Modal or overlay element not found.');
+          }
+      }
+      
+      function closeModal(index) {
+          const modal = document.getElementById(`modal_${index}`);
+          const overlay = document.getElementById(`overlay_${index}`);
+          
+          if (modal && overlay) {
+              overlay.style.display = 'none';
+              modal.style.display = 'none';
+          } else {
+              console.error('Modal or overlay element not found.');
+          }
+      }
+      </script>
   </body>
 </html>

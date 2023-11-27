@@ -98,6 +98,22 @@ def mark_as_unclaimed(post_id):
     cursor.close()
     return redirect(url_for('routes.dashboard.dashboar'))
 
-@posts.route('/make_comment/<int:post_id>', methods=['POST', 'GET'])
-def make_comment(post_id):
-    cursor, connection = get_cursor()
+@posts.route('/make_comment/<int:post_id>/<tab>', methods=['POST', 'GET'])
+def make_comment(post_id, tab):
+    if not is_user_logged_in():
+        return redirect(url_for("routes.authentication.login"))
+    
+    lostcount, foundcount, unclaimedcount, claimedcount = getItemcount()
+    itemcount = [lostcount, foundcount, unclaimedcount, claimedcount]
+    user, user_id, user_role = get_current_user_data()
+    if request.method == "POST":
+        user_comment = request.form["user_comment"]
+        user_id = user_id
+        cursor, connection = get_cursor()
+
+        if user_comment:
+            query = "INSERT INTO tbl_comment (colItemID, colUserID, colComment) VALUES (%s, %s, %s)"
+            cursor.execute(query, (post_id, user_id, user_comment))
+
+            connection.commit()    
+            return redirect(url_for(f'routes.{tab}', user_role=user_role, itemcount=itemcount, text="Upload Successful.", text_status="success", show_sweetalert=True))
