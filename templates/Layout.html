@@ -54,6 +54,12 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='assets/fbcard/facebook.css' )}}"
     />
+    <script>
+      function setDefaultImage(image) {
+        image.onerror = null;
+        image.src = "{{ url_for('static', filename='pics/noimage.png') }}";
+      }
+    </script>    
   </head>
 
   <body>

@@ -43,7 +43,7 @@
       <h4 class="fbtitle text-gray-700 dark:text-gray-200">{{ items[i][1]}} </h4>
       <h4 class="fbmessage text-gray-600 dark:text-gray-400">{{ items[i][2]}} </h4>
       <div class="fbimgBg centerfb">
-        <img src="{{paths[i]}}" alt="bg" class="coverFull" />
+        <img src="{{paths[i]}}" alt="No image" class="coverFull" onerror="setDefaultImage(this);" />
       </div>
       <div class="fbbtns">
         <div class="fbleft">

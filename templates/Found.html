@@ -203,7 +203,12 @@
         {{ items[i][2]}}
       </h4>
       <div class="fbimgBg centerfb">
-        <img src="{{paths[i]}}" alt="bg" class="coverFull" />
+        <img
+          src="{{paths[i]}}"
+          alt="No image"
+          class="coverFull"
+          onerror="setDefaultImage(this);"
+        />
       </div>
       <div class="fbbtns">
         <div class="fbleft">

@@ -20,6 +20,6 @@ def claime():
     query = "SELECT u.colUsername, lp.colItemName, lp.colItemDesc, u.colEmail, cp.colDateClaimed, pic.colPicURI, lp.colItemID FROM tbl_items AS lp JOIN tbl_user AS u ON lp.colPosterID = u.colUserID left JOIN tbl_item_pic AS pic ON lp.colItemID = pic.colItemID join tbl_claimed as cp on cp.colItemID = lp.colItemID and lp.colStatusID = 4 where lp.colStatusID = 4 order by lp.colDatePosted desc;"
     cursor.execute(query)
     value = cursor.fetchall()
-    img_paths = [row[5] if row[5] is not None else "No Image" for row in value]
+    img_paths = [row[5] if row[5] is not None else "pics/noimage" for row in value]
     img_path = [path.replace('\\', '/') for path in img_paths]
     return render_template("Claimed.html",user_role=user_role, items=value, paths=img_path, itemcount=itemcount)
