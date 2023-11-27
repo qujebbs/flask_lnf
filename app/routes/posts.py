@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, request, session, Blueprint
+from flask import Flask, render_template, request, redirect, url_for, request, session, Blueprint, jsonify
 import bcrypt
 import os
 import secrets
@@ -117,3 +117,15 @@ def make_comment(post_id, tab):
 
             connection.commit()    
             return redirect(url_for(f'routes.{tab}', user_role=user_role, itemcount=itemcount, text="Upload Successful.", text_status="success", show_sweetalert=True))
+        
+# @posts.route('/view_comment/<int:post_id>', methods=['GET'])
+# def view_comment(post_id):
+#     cursor, connection = get_cursor()
+#     query = "Select * from tbl_comment where colItemID = %s"
+#     cursor.execure(query, (post_id,))
+#     comments = cursor.fetchall()
+
+#     comments_list = [{'comment_id': row[0], 'comment_text': row[3]} for row in comments]
+
+#     return jsonify(comments_list)
+

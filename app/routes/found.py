@@ -11,7 +11,7 @@ found = Blueprint('found', __name__)
 @found.route("/found", methods=["GET", "POST"])
 def foun():
         if not is_user_logged_in():
-            return redirect(url_for("authentication.login"))
+            return redirect(url_for("routes.authentication.login"))
         
 
         lostcount, foundcount, unclaimedcount, claimedcount = getItemcount()

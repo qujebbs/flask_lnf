@@ -613,5 +613,28 @@
           }
       }
       </script>
+
+      <!-- view -->
+      <script>
+        // Find all buttons and attach event listeners
+        document.querySelectorAll('.toggleCommentsBtn').forEach((button, index) => {
+            button.addEventListener('click', () => toggleComments(index));
+        });
+        
+        // Toggle comments function
+        function toggleComments(index) {
+            const comments = document.querySelectorAll('.comments')[index];
+            
+            if (comments) {
+                if (comments.style.display === 'none') {
+                    comments.style.display = 'block';
+                } else {
+                    comments.style.display = 'none';
+                }
+            } else {
+                console.error('Comments section not found.');
+            }
+        }
+        </script>
   </body>
 </html>

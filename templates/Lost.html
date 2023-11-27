@@ -226,13 +226,9 @@
             src="{{url_for('static', filename='assets/fbcard/gray_like.png')}}"
             alt="like"
             class="graylike"
-            onclick="likeButton()"
           />
           <button class="showPopup" onclick="toggleModal(0)"><img src="{{url_for('static', filename='assets/fbcard/comments.png')}}"alt="comments"/></button>
-          <img
-            src="{{url_for('static', filename='assets/fbcard/share.png')}}"
-            alt="share"
-          />
+          <button class="toggleCommentsBtn" ><img src="{{url_for('static', filename='assets/fbcard/share.png')}}" alt="share"/></button>
         </div>
       </div>
       <div class="fbborder_bott"></div>
@@ -245,12 +241,19 @@
           <button type="button" onclick="closeModal(0)">Cancel</button>
         </form>
       </div>
-      <!-- <div class="fbaddComments">
-            <div class="fbuserimg">
-                <img src="{{url_for('static', filename='assets/fbcard/User.jpg')}}" alt="user" class="cover">
-            </div>
-            <input type="text" class="fbtext" placeholder="Write a comment...">
-        </div> -->
+      <div class="comments" style="display: none;">
+        <!-- Loop through and display comments here -->
+  {% if items[i][9] is not none %}
+    {% if items[i][7] == items[i][8] %}
+    {% set commenter_name = items[i][9] %}
+      {% for comment in items[i][10].split(',') %}
+        <div class="comment">{{ comment }}</div>
+        <div class="comment">{{ commenter_name }}</div>
+        <!-- Add more comments dynamically or through your backend -->
+        {% endfor %}
+    {% endif %}
+  {% endif %}
+    </div>
     </div>
   </div>
   {% endfor %}
