@@ -1,8 +1,19 @@
 from flask import Blueprint
 
-routes_blueprint = Blueprint('routes', __name__)
+routes_blueprint = Blueprint("routes", __name__)
 
-from app.routes import dashboard, authentication, mypost, found, users, claimed, lost, unclaimed, landing, posts
+from app.routes import (
+    dashboard,
+    authentication,
+    mypost,
+    found,
+    users,
+    claimed,
+    lost,
+    unclaimed,
+    landing,
+    posts,
+)
 
 routes_blueprint.register_blueprint(dashboard.dashboard)
 routes_blueprint.register_blueprint(authentication.authentication)
