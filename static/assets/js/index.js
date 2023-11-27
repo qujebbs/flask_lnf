@@ -89,3 +89,15 @@ function showConfirmationDialog() {
     }
   });
 }
+
+document.getElementById("uploadForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  Swal.fire({
+    icon: "success",
+    title: "File has been uploaded successfully",
+    showConfirmButton: false,
+    timer: 1500
+  }).then(function() {
+    event.target.submit();
+  });
+});
