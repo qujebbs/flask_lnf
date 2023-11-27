@@ -13,6 +13,7 @@ import os
 import secrets
 import smtplib
 import requests
+import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from utils import (
@@ -225,7 +226,7 @@ def forgot_password():
         if user:
             token = secrets.token_hex(16)
             with connection.cursor() as cursor:
-                query = "INSERT INTO `tbl_reset_token` (`colUserID`, `colToken`, `colExpiration`) VALUES (%s, %s, NOW() + INTERVAL 1 HOUR);"
+                query = "INSERT INTO `tbl_reset_token` (`colUserID`, `colToken`, `colExpiration`) VALUES (%s, %s, NOW() + INTERVAL 1 HOUR)"
                 cursor.execute(query, (user[0], token))
                 connection.commit()
                 send_password_reset_email(user[2], token)
@@ -259,6 +260,7 @@ def send_password_reset_email(email, token):
             <p>Dear User,</p>
             <p>It appears that you've requested assistance in recovering your account password. No worries, we're here to help!</p>
             <p>Your password reset link is: <a href="http://127.0.0.1:5000/reset_password/{token}" style="color: #ff0000;">Reset Password</a></p>
+            <p>This link will expire in 1 hour.</p>
             <p>If you did not initiate this request or have any concerns, please contact our support team at <a href='mailto:johnmiller.asz8@gmail.com' style="color: #006699;">support@lostNfound</a> for further assistance.</p>
             <p>Best Regards,<br>Your Support Team</p>
         </div>
@@ -308,15 +310,35 @@ def reset_password(token):
             return render_with_alert(
                 "reset_password.html", text=message, text_status="error", token=token
             )
+        query = "SELECT colExpiration FROM tbl_reset_token WHERE colToken = %s"
+        cursor.execute(query, (token,))
+        result = cursor.fetchone()
 
-        query = "UPDATE tbl_user SET colUserPass = %s  WHERE colUserID IN (SELECT colUserID FROM tbl_reset_token WHERE colToken = %s)"
-        hashed_password = bcrypt.hashpw(new_password.encode("utf-8"), bcrypt.gensalt())
-        cursor.execute(query, (hashed_password, token))
-        connection.commit()
-        return render_with_alert(
-            "login.html",
-            text="Successfully updated your password.",
-            text_status="success",
-        )
+        if result and result[0] > datetime.datetime.now():
+            query = "UPDATE tbl_user SET colUserPass = %s  WHERE colUserID IN (SELECT colUserID FROM tbl_reset_token WHERE colToken = %s AND colExpiration > NOW())"
+            hashed_password = bcrypt.hashpw(
+                new_password.encode("utf-8"), bcrypt.gensalt()
+            )
+            cursor.execute(query, (hashed_password, token))
+            connection.commit()
+
+            delete_query = "DELETE FROM tbl_reset_token WHERE colToken = %s"
+            cursor.execute(delete_query, (token,))
+            connection.commit()
+            return render_with_alert(
+                "login.html",
+                text="Successfully updated your password.",
+                text_status="success",
+            )
+        else:
+            delete_query = "DELETE FROM tbl_reset_token WHERE colToken = %s"
+            cursor.execute(delete_query, (token,))
+            connection.commit()
+            return render_with_alert(
+                "login.html",
+                text="Password reset link has expired.",
+                text_status="error",
+                token=token,
+            )
 
     return render_template("reset_password.html", token=token)
