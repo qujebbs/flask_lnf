@@ -32,7 +32,7 @@ def upload():
         pictures = request.files.getlist("pics")
         user_id = user_id
         cursor, connection = get_cursor()
-        if item_name and description and pictures:
+        if item_name and description:
             query = "call createNewItem(%s,%s,%s,%s)"
             cursor.execute(
                 query, (item_name, description, user_id, user_rolee)
@@ -41,16 +41,17 @@ def upload():
                 "SELECT last_insert_id() AS 'postID' FROM tbl_items  LIMIT 1;"
             )
             postid = cursor.fetchone()[0]
+            print(pictures)
+            if any(p.filename for p in pictures):
+                for pic in pictures:
+                    file_name = pic.filename
+                    file_path = os.path.join(app.config["UPLOAD_FOLDER"], file_name)
 
-            for pic in pictures:
-                file_name = pic.filename
-                file_path = os.path.join(app.config["UPLOAD_FOLDER"], file_name)
+                    newfile_path = os.path.join(r"C:\Users\fajar\OneDrive\Desktop\flask_lnf\static", file_path)
+                    query = "call insertNewPic(%s,%s)"
+                    cursor.execute(query, (postid, file_path))
 
-                newfile_path = os.path.join(r"C:\Users\fajar\OneDrive\Desktop\flask_lnf\static", file_path)
-                query = "call insertNewPic(%s,%s)"
-                cursor.execute(query, (postid, file_path))
-
-                pic.save(newfile_path)
+                    pic.save(newfile_path)
 
             connection.commit()    
             return redirect(url_for('routes.dashboard.dashboar', user_role=user_role, itemcount=itemcount, text="Upload Successful.", text_status="success", show_sweetalert=True))
@@ -96,3 +97,7 @@ def mark_as_unclaimed(post_id):
     connection.commit()
     cursor.close()
     return redirect(url_for('routes.dashboard.dashboar'))
+
+@posts.route('/make_comment/<int:post_id>', methods=['POST', 'GET'])
+def make_comment(post_id):
+    cursor, connection = get_cursor()
