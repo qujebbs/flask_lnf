@@ -20,6 +20,7 @@
         font-family: karla;
       }
     </style>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
 
   <body class="bg-white font-family-karla h-screen">
@@ -69,7 +70,6 @@
                 required
               />
             </div>
-
             <div class="flex flex-col pt-4">
               <label class="text-lg">Confirm Password</label>
               <input
@@ -80,11 +80,16 @@
                 required
               />
             </div>
-
+            <div class="flex flex-col pt-4">
+              <div
+                class="g-recaptcha"
+                data-sitekey="6Ldqxh0pAAAAAEhja6y2-knUXjL2p0M_Ul0vnqoI"
+              ></div>
+            </div>
             <input
               type="submit"
               value="Register"
-              class="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
+              class="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-4"
             />
           </form>
           <div class="text-center pt-12 pb-12">

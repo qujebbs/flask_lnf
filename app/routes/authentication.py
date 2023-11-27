@@ -12,6 +12,7 @@ import bcrypt
 import os
 import secrets
 import smtplib
+import requests
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from utils import (
@@ -50,6 +51,14 @@ def login():
 @authentication.route("/register", methods=["POST", "GET"])
 def register():
     if request.method == "POST":
+        recaptcha_response = request.form.get("g-recaptcha-response")
+        if not validate_recaptcha(recaptcha_response):
+            return render_with_alert(
+                "register.html",
+                text="Invalid reCAPTCHA.",
+                text_status="error",
+            )
+
         username = request.form["username"]
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
@@ -104,7 +113,7 @@ def register():
             connection.commit()
 
             return render_with_alert(
-                "register.html",
+                "login.html",
                 text="Account created successfully.",
                 text_status="success",
             )
@@ -185,3 +194,16 @@ def forgot_username():
 
 def render_with_alert(template, **kwargs):
     return render_template(template, show_sweetalert=True, **kwargs)
+
+
+def validate_recaptcha(response):
+    secret_key = "YOUR_SECRET_KEY"
+    payload = {"response": response, "secret": secret_key}
+    response = requests.post(
+        "https://www.google.com/recaptcha/api/siteverify", data=payload
+    )
+
+    if response.json()["success"]:
+        return True
+    else:
+        return False
