@@ -157,8 +157,9 @@
           <div class="fbprofile_img">
             <img
               src="{{paths[i]}}"
-              alt="user"
+              alt="No image"
               class="cover"
+              onerror="setDefaultImage(this);"
             />
           </div>
           <h3 class="text-gray-700 dark:text-gray-200">
