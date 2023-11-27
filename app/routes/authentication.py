@@ -24,6 +24,7 @@ from utils import (
 )
 
 authentication = Blueprint("authentication", __name__)
+token = secrets.token_hex(16)
 
 
 @authentication.route("/login", methods=["POST", "GET"])
@@ -127,7 +128,37 @@ def logout():
     return render_template("login.html")
 
 
-def send_password_reset_email(email, username):
+@authentication.route("/forgot_username", methods=["GET", "POST"])
+def forgot_username():
+    if request.method == "POST":
+        email = request.form["email"]
+        cursor = get_cursor()
+        connection = get_connection()
+
+        with connection.cursor() as cursor:
+            query = "SELECT * FROM tbl_user WHERE colEmail = %s"
+            cursor.execute(query, (email,))
+            user = cursor.fetchone()
+
+        if user:
+            send_username_reset_email(user[2], user[1])
+        else:
+            return render_with_alert(
+                "forgot_username.html",
+                text="No email found.",
+                text_status="info",
+            )
+
+        return render_with_alert(
+            "login.html",
+            text="Username sent in your email.",
+            text_status="success",
+        )
+
+    return render_template("forgot_username.html")
+
+
+def send_username_reset_email(email, username):
     sender_email = "johnmiller.asz8@gmail.com"
     password = "utkk gxyl whdq grgt"
 
@@ -162,36 +193,6 @@ def send_password_reset_email(email, username):
         server.send_message(message)
 
 
-@authentication.route("/forgot_username", methods=["GET", "POST"])
-def forgot_username():
-    if request.method == "POST":
-        email = request.form["email"]
-        cursor = get_cursor()
-        connection = get_connection()
-
-        with connection.cursor() as cursor:
-            query = "SELECT * FROM tbl_user WHERE colEmail = %s"
-            cursor.execute(query, (email,))
-            user = cursor.fetchone()
-
-        if user:
-            send_password_reset_email(user[2], user[1])
-        else:
-            return render_with_alert(
-                "forgot_username.html",
-                text="No email found.",
-                text_status="info",
-            )
-
-        return render_with_alert(
-            "login.html",
-            text="Username sent in your email.",
-            text_status="success",
-        )
-
-    return render_template("forgot_username.html")
-
-
 def render_with_alert(template, **kwargs):
     return render_template(template, show_sweetalert=True, **kwargs)
 
@@ -207,3 +208,115 @@ def validate_recaptcha(response):
         return True
     else:
         return False
+
+
+@authentication.route("/forgot_password", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "POST":
+        email = request.form["email"]
+        cursor = get_cursor()
+        connection = get_connection()
+
+        with connection.cursor() as cursor:
+            query = "SELECT * FROM tbl_user WHERE colEmail = %s"
+            cursor.execute(query, (email,))
+            user = cursor.fetchone()
+
+        if user:
+            token = secrets.token_hex(16)
+            with connection.cursor() as cursor:
+                query = "INSERT INTO `tbl_reset_token` (`colUserID`, `colToken`, `colExpiration`) VALUES (%s, %s, NOW() + INTERVAL 1 HOUR);"
+                cursor.execute(query, (user[0], token))
+                connection.commit()
+                send_password_reset_email(user[2], token)
+        else:
+            return render_with_alert(
+                "forgot_password.html",
+                text="No email found.",
+                text_status="info",
+            )
+
+        return render_with_alert(
+            "login.html",
+            text="Reset link sent in your email.",
+            text_status="success",
+        )
+
+    return render_template("forgot_password.html")
+
+
+def send_password_reset_email(email, token):
+    sender_email = "johnmiller.asz8@gmail.com"
+    password = "utkk gxyl whdq grgt"
+
+    # Compose the email message
+    subject = "Your Password"
+    body = """
+<html>
+    <body style="font-family: Arial, sans-serif; text-align: center;">
+        <div style="border: 2px solid #006699; padding: 20px; margin: 10px;">
+            <h2 style="color: #006699;">LostNFound Account Recovery</h2>
+            <p>Dear User,</p>
+            <p>It appears that you've requested assistance in recovering your account password. No worries, we're here to help!</p>
+            <p>Your password reset link is: <a href="http://127.0.0.1:5000/reset_password/{token}" style="color: #ff0000;">Reset Password</a></p>
+            <p>If you did not initiate this request or have any concerns, please contact our support team at <a href='mailto:johnmiller.asz8@gmail.com' style="color: #006699;">support@lostNfound</a> for further assistance.</p>
+            <p>Best Regards,<br>Your Support Team</p>
+        </div>
+    </body>
+</html>
+""".format(
+        token=token
+    )
+    message = MIMEMultipart("alternative")
+    message["Subject"] = subject
+    message["From"] = sender_email
+    message["To"] = email
+    part = MIMEText(body, "html")
+    message.attach(part)
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()
+        server.login(sender_email, password)
+        server.send_message(message)
+
+
+@authentication.route("/reset_password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    if request.method == "POST":
+        new_password = request.form.get("new_password")
+        confirm_password = request.form.get("confirm_password")
+        cursor, connection = get_cursor()
+
+        def check_password(new_password, confirm_password):
+            if len(new_password) < 8:
+                return False, "Password should be at least 8 characters long."
+            if new_password != confirm_password:
+                return False, "Passwords do not match."
+            if not (
+                any(char.islower() for char in new_password)
+                and any(char.isupper() for char in new_password)
+                and any(char.isdigit() for char in new_password)
+            ):
+                return (
+                    False,
+                    "Password should contain at least one Lowercase letter, one Uppercase letter and one digit.",
+                )
+            return True, ""
+
+        password_check, message = check_password(new_password, confirm_password)
+        if not password_check:
+            return render_with_alert(
+                "reset_password.html", text=message, text_status="error", token=token
+            )
+
+        query = "UPDATE tbl_user SET colUserPass = %s  WHERE colUserID IN (SELECT colUserID FROM tbl_reset_token WHERE colToken = %s)"
+        hashed_password = bcrypt.hashpw(new_password.encode("utf-8"), bcrypt.gensalt())
+        cursor.execute(query, (hashed_password, token))
+        connection.commit()
+        return render_with_alert(
+            "login.html",
+            text="Successfully updated your password.",
+            text_status="success",
+        )
+
+    return render_template("reset_password.html", token=token)
