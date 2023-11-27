@@ -30,9 +30,9 @@
               <span><i class="fab fa-facebook-f"></i></span>
             </li>
           </form>
-            <form action="delpost/{{ items[i][7]}}" method="post">
+            <form id="deleteForm" action="delpost/{{ items[i][7]}}" method="post">
             <li class="icon instagram">
-              <span><button type="submit">Delete</button></span>
+              <span><button type="button" onclick="showConfirmationDialog()">Delete</button></span>
               <span><i class="fab fa-instagram"></i></span>
             </li></form>
           </ul>

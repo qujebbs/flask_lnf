@@ -206,3 +206,31 @@ textarea {
   background: #e4405f;
   color: #fff;
 }
+.confirmation-dialog {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+
+.confirmation-dialog h2 {
+  margin-top: 0;
+}
+
+.confirmation-dialog button {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.confirmation-dialog button:hover {
+  background-color: #0056b3;
+}
